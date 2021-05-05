@@ -48,7 +48,8 @@ new ChickenPaint({
 	canvasWidth: <% echo(picw) %>,
 				canvasHeight: <% echo(pich) %>,
 
-
+	loadImageUrl: "<% echo(imgfile) %>",
+	loadChibiFileUrl: "<% echo(img_chi) %>",
     saveUrl: "save.php?usercode=<% echo(usercode) %>",
     postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
     exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
@@ -58,5 +59,96 @@ new ChickenPaint({
 		
 
 		<% /def %>
+
+		<% def(continue_mode) %>
+		<!-- (========== CONTINUE MODE(コンティニューモード) start ==========) -->
+		<script type="text/javascript" src="loadcookie.js"></script>
+		<section>
+			<div class="thread">
+				<figure>
+					<img src="<% echo(picfile) %>">
+					<figcaption><% echo(picfile) %><% def(painttime) %> PaintTime : <% echo(painttime) %><% /def %></figcaption>
+				</figure>
+				<hr class="hr">
+				<form action="<% echo(self) %>" method="post">
+					<input type="hidden" name="mode" value="contpaint">
+					<input type="hidden" name="anime" value="true">
+					<input type="hidden" name="picw" value="<% echo(picw) %>">
+					<input type="hidden" name="pich" value="<% echo(pich) %>">
+					<input type="hidden" name="no" value="<% echo(no) %>">
+					<input type="hidden" name="pch" value="<% echo(pch) %>">
+					<input type="hidden" name="ext" value="<% echo(ext) %>">
+					<select class="form" name="ctype">
+						<% def(ctype_pch) %><option value="pch">from animation</option><% /def %>
+						<% def(ctype_img) %><option value="img">from picture</option><% /def %>
+					</select>
+					<select class="form" name="type">
+						<option value="rep">replace</option>
+						<option value="new">newpost</option>
+					</select>
+					<% def(use_select_palettes) %>
+						パレット：<select name="selected_palette_no" title="パレット" class="form"><% echo(palette_select_tags) %></select>
+						<% /def %>
+
+					<% def(passflag) %>Pass<input class="form" type="password" name="pwd" size="8" value=""> <% /def %>
+					<input class="button" type="submit" value="続きを描く">
+					<!-- NEOを使う -->
+					<% if(ctype_pch,==,false) %>
+					<label><input type="checkbox" name="useneo" checked="checked" /><span class="use_neo">USE NEO</span></label>
+					<% /if %>
+					<% def(applet) %>
+					<input type="hidden" name="shi" value="1">
+					<% elsedef %>
+					<input type="hidden" name="useneo" value="1">
+					<% /def %>
+				</form>
+				<% def(passflag) %>
+				<ul>
+					<% def(newpost_nopassword) %>
+					<li>新規投稿なら削除キーがなくても続きを描く事ができます。</li>
+					<% elsedef %>
+					<li>続きを描くには描いたときの削除キーが必要です。</li>
+					<% /def %>
+					</ul>
+				<% /def %>
+			</div>
+			<script type="text/javascript">
+			l(); //LoadCookie
+			</script>
+		</section>
+		<!-- (========== CONTINUE MODE(コンティニューモード) end ==========) -->
+		<% /def %>
+	</main>
+	<footer>
+		<article class="copy">
+			<!-- 著作権表示 削除しないでください -->
+			<!-- GazouBBS v3.0 --><!-- ふたば改0.8 --><!-- POTI-board -->
+			<p>
+				<a href="https://pbbs.sakura.ne.jp/poti/" target="_top" title="POTI-board改二 <% echo(verlot) %>">POTI-board改二 <% echo(ver) %></a>
+				Web Style by <a href="https://pbbs.sakura.ne.jp/poti/" target="_top" title="MONO <% echo(tver) %>">MONO</a>
+			</p>
+			<p>
+				OriginalScript -
+				<a href="http://www.punyu.net/" target="_top" title="POTI-board (by PunyuNet)">POTI-board</a>
+				<a href="http://www.2chan.net/" target="_top" title="futaba.php v0.8 lot.031015 (by futaba)">futaba.php</a>
+				(<a href="http://php.loglog.jp/" target="_top" title="gazou.php v3.0 (by Let's PHP!)">gazou.php</a>custom )
+			</p>
+			<% def(paint) %>
+			<p>
+				OekakiApplet - <a href="http://hp.vector.co.jp/authors/VA016309/" target="_blank" rel="noopener noreferrer" title="by しぃちゃん">Shi-Painter</a>
+			</p>
+			<% /def %>
+			<p>
+				UseFunction -
+				<a href="http://skinny.sx68.net/" target="_top" title="Skinny.php (by Kuasuki)">Skinny.php</a>
+				DynamicPalette <!-- http://wondercatstudio.com/ -->
+				<a href="https://github.com/funige/neo/" target="_top" title="by ImageCanvas">PaintBBS NEO</a>
+			</p>
+		</article>
+	</footer>
+</body>
+</html>
+
+
 	</body>
 </html>

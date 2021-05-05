@@ -943,6 +943,15 @@ function regist(){
 			}
 			if($i>=$chkline){break;}//チェックする最大行数
 		}
+		//chiファイルアップロード
+		if(is_file($temppath.$picfile.'.chi')){
+			$src = $temppath.$picfile.'.chi';
+			$dst = PCH_DIR.$time.'.chi';
+			if(copy($src, $dst)){
+				chmod($dst,PERMISSION_FOR_DEST);
+				unlink($src);
+			}
+		}
 
 		//PCHファイルアップロード
 		if ($pchext = check_pch_ext($temppath.$picfile)) {
@@ -1532,6 +1541,9 @@ function paintform(){
 		$dat['animeform'] = false;
 		$dat['anime'] = false;
 		$dat['imgfile'] = './'.PCH_DIR.$pch.$ext;
+		if(is_file(PCH_DIR.$pch.'.chi')){
+			$dat['img_chi'] = './'.PCH_DIR.$pch.'.chi';
+		}
 	}
 
 	$dat['palsize'] = count($DynP) + 1;
@@ -1548,8 +1560,8 @@ function paintform(){
 		$repcode = substr(crypt(md5($no.$userip.$pwd.date("Ymd", $time)),$time),-8);
 		//念の為にエスケープ文字があればアルファベットに変換
 		$repcode = strtr($repcode,"!\"#$%&'()+,/:;<=>?@[\\]^`/{|}~","ABCDEFGHIJKLMNOabcdefghijklmn");
-		$dat['mode'] = 'picrep&amp;no='.$no.'&amp;pwd='.$pwd.'&amp;repcode='.$repcode;
-		$usercode.='repcode='.$repcode;
+		$dat['mode'] = 'picrep&no='.$no.'&pwd='.$pwd.'&repcode='.$repcode	;
+		$usercode.='&repcode='.$repcode;
 	}
 	$dat['usercode'] = $usercode;
 	htmloutput(SKIN_DIR.PAINTFILE,$dat);
@@ -1891,6 +1903,8 @@ function replace(){
 	global $path,$temppath;
 	$no = filter_input(INPUT_GET, 'no',FILTER_VALIDATE_INT);
 	$pwd = newstring(filter_input(INPUT_GET, 'pwd'));
+	// var_dump($pwd);
+	// exit;
 	$repcode = newstring(filter_input(INPUT_GET, 'repcode'));
 	$message="";
 	$userip = get_uip();
@@ -1991,6 +2005,16 @@ function replace(){
 			//ワークファイル削除
 			safe_unlink($upfile);
 			safe_unlink($temppath.$file_name.".dat");
+					//chiファイルアップロード
+			if(is_file($temppath.$file_name.'.chi')){
+				$src = $temppath.$file_name.'.chi';
+				$dst = PCH_DIR.$time.'.chi';
+				if(copy($src, $dst)){
+					chmod($dst,PERMISSION_FOR_DEST);
+					unlink($src);
+				}
+			}
+
 			//PCHファイルアップロード
 			// .pch, .spch, ブランク どれかが返ってくる
 			if ($pchext = check_pch_ext($temppath . $file_name)) {

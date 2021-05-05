@@ -1,2 +1,3 @@
-# POTI-board_ChickenPaint
-POTI-board ChickenPaint 対応版
+# POTI-board ChickenPaint 対応版
+
+

@@ -1347,6 +1347,8 @@ function paintform(){
 	global $resto,$qualitys,$usercode;
 	global $ADMIN_PASS,$pallets_dat;
 
+	$dat['chickenpaint']=true;
+
 	$mode = filter_input(INPUT_POST, 'mode');
 	$picw = filter_input(INPUT_POST, 'picw',FILTER_VALIDATE_INT);
 	$pich = filter_input(INPUT_POST, 'pich',FILTER_VALIDATE_INT);
@@ -1541,7 +1543,7 @@ function paintform(){
 		$dat['animeform'] = false;
 		$dat['anime'] = false;
 		$dat['imgfile'] = './'.PCH_DIR.$pch.$ext;
-		if(is_file(PCH_DIR.$pch.'.chi')){
+		if(is_file('./'.PCH_DIR.$pch.'.chi')){
 			$dat['img_chi'] = './'.PCH_DIR.$pch.'.chi';
 		}
 	}

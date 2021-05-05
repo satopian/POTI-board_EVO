@@ -33,11 +33,11 @@ $success = TRUE;
 $success = $success && move_uploaded_file($_FILES['picture']['tmp_name'], TEMP_DIR.$imgfile.'.png');
 
 if (isset($_FILES["chibifile"])) {
-	$success = $success && move_uploaded_file($_FILES['chibifile']['tmp_name'], 'uploaded.chi');
+	$success = $success && move_uploaded_file($_FILES['chibifile']['tmp_name'], TEMP_DIR.$imgfile.'.chi');
 }
 
 if (isset($_FILES['swatches'])) {
-    $success = $success && move_uploaded_file($_FILES['swatches']['tmp_name'], 'uploaded.aco');
+    $success = $success && move_uploaded_file($_FILES['swatches']['tmp_name'], TEMP_DIR.$imgfile.'.aco');
 }
 
 if (!$success) {

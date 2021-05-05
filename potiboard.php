@@ -1,4 +1,5 @@
 <?php
+//POTI-board ChickenPaint 対応版
 define('USE_DUMP_FOR_DEBUG','0');
 //HTML出力の前に$datをdump しない:0 する:1 dumpしてexit：2 
 // ini_set('error_reporting', E_ALL);
@@ -1539,7 +1540,7 @@ function paintform(){
 	}
 	$dat['dynp']=implode('',$arr_dynp);
 	$dat['useneo'] = $useneo; //NEOを使う
-	$usercode.='&amp;stime='.time().$resto;
+	$usercode.='&stime='.time().$resto;
 	//差し換え時の認識コード追加
 	if($type==='rep'){
 		$time=time();
@@ -1548,7 +1549,7 @@ function paintform(){
 		//念の為にエスケープ文字があればアルファベットに変換
 		$repcode = strtr($repcode,"!\"#$%&'()+,/:;<=>?@[\\]^`/{|}~","ABCDEFGHIJKLMNOabcdefghijklmn");
 		$dat['mode'] = 'picrep&amp;no='.$no.'&amp;pwd='.$pwd.'&amp;repcode='.$repcode;
-		$usercode.='&amp;repcode='.$repcode;
+		$usercode.='repcode='.$repcode;
 	}
 	$dat['usercode'] = $usercode;
 	htmloutput(SKIN_DIR.PAINTFILE,$dat);
@@ -1593,7 +1594,6 @@ function paintcom(){
 	closedir($handle);
 	$tmp = array();
 	if(count($tmplist)!=0){
-		//user-codeとipアドレスでチェック
 		foreach($tmplist as $tmpimg){
 			list($ucode,$uip,$ufilename) = explode("\t", $tmpimg);
 			if($ucode == $usercode||$uip == $userip){

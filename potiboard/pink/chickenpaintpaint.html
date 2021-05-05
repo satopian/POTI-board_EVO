@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+		<meta charset="<% echo(charset) %>">
+		<% def(paint_mode) %>
+		<% def(pinchin) %>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<% elsedef %>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+		<% /def %>
+		<% /def %>
+		<title><% echo(title) %></title>
+
+		<script type="text/javascript">
+			/* Check for native pointer event support before PEP adds its polyfill */
+			if (window.PointerEvent) {
+				window.hasNativePointerEvents = true;
+			}
+		
+		</script>
+		
+		<script src="chickenpaint/lib/raf.js"></script>
+		<script src="chickenpaint/lib/es6-promise.min.js"></script>
+		<script src="chickenpaint/lib/jquery-2.2.1.min.js"></script>
+		<script src="chickenpaint/lib/pep.min.js"></script>
+		<script src="chickenpaint/lib/pako-1.0.1-1.js"></script>
+		<script src="chickenpaint/lib/keymaster.js"></script>
+		<script src="chickenpaint/lib/EventEmitter.min.js"></script>
+		<script src="chickenpaint/lib/FileSaver.min.js"></script>
+		<script src="chickenpaint/lib/bootstrap.min.js"></script>
+		
+		<script src="chickenpaint/resources/js/chickenpaint.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="chickenpaint/resources/css/chickenpaint.css">
+		
+	</head>
+
+	<body>
+		<% def(paint_mode) %>
+
+			<div id="chickenpaint-parent"></div>
+			<p></p>
+		<script>
+
+new ChickenPaint({
+    uiElem: document.getElementById("chickenpaint-parent"),
+	canvasWidth: <% echo(picw) %>,
+				canvasHeight: <% echo(pich) %>,
+
+
+    saveUrl: "save.php?usercode=<% echo(usercode) %>",
+    postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
+    exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
+    resourcesRoot: "chickenpaint/"
+});
+		</script>
+		
+
+		<% /def %>
+	</body>
+</html>

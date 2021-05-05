@@ -1347,14 +1347,14 @@ function paintform(){
 	global $resto,$qualitys,$usercode;
 	global $ADMIN_PASS,$pallets_dat;
 
-	$dat['chickenpaint']=true;
+	// $dat['chickenpaint']=true;
 
 	$mode = filter_input(INPUT_POST, 'mode');
 	$picw = filter_input(INPUT_POST, 'picw',FILTER_VALIDATE_INT);
 	$pich = filter_input(INPUT_POST, 'pich',FILTER_VALIDATE_INT);
 	$anime = filter_input(INPUT_POST, 'anime',FILTER_VALIDATE_BOOLEAN);
 	$useneo = filter_input(INPUT_POST, 'useneo',FILTER_VALIDATE_BOOLEAN);
-	$shi = filter_input(INPUT_POST, 'shi',FILTER_VALIDATE_INT);
+	$shi = filter_input(INPUT_POST, 'shi');
 	$pch = newstring(filter_input(INPUT_POST, 'pch'));
 	$ext = newstring(filter_input(INPUT_POST, 'ext'));
 	$ctype = newstring(filter_input(INPUT_POST, 'ctype'));
@@ -1366,6 +1366,10 @@ function paintform(){
 	setcookie("picwc", $picw , time()+(86400*SAVE_COOKIE));//幅
 	setcookie("pichc", $pich , time()+(86400*SAVE_COOKIE));//高さ
 
+	$useneo=($shi==='neo');
+	$dat['chickenpaint']=($shi==='chicken');
+	
+	
 	//pchファイルアップロードペイント
 	if($admin&&($admin===$ADMIN_PASS)){
 		
@@ -1728,12 +1732,19 @@ function incontinue(){
 	$cptime=is_numeric($cptime) ? calcPtime($cptime) : $cptime; 
 	if(DSP_PAINTTIME) $dat['painttime'] = $cptime;
 	$dat['applet'] = true;
+	$dat['ctype_spch'] = false;
+	$dat['ctype_chi'] = false;
 	if(is_file(PCH_DIR.$ctim.'.pch')){
 		$dat['ctype_pch'] = true;
 		$dat['applet'] = false;
 	}elseif(is_file(PCH_DIR.$ctim.'.spch')){
+		$dat['ctype_spch'] = true;
 		$dat['ctype_pch'] = true;
 		$dat['usepbbs'] = false;
+	}elseif(is_file(PCH_DIR.$ctim.'.chi')){
+		$dat['usepbbs'] = false;
+		
+		$dat['ctype_chi'] = true;
 	}
 	if(mime_content_type(IMG_DIR.$ctim.$cext)==='image/webp'){
 		$dat['applet'] = false;

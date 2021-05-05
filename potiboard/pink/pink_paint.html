@@ -518,22 +518,43 @@ name="pch" code="pch.PCHViewer.class" archive="PCHViewer.jar,PaintBBS.jar" width
 {/def) 
 -->
 <% /def %>
+<% def(ctype_pch) %>
+<% def(ctype_spch) %>
+<input type="hidden" name="shi" value="1">
+<% elsedef %>
+<input type="hidden" name="shi" value="0">
+<% /def %>
+<% /def %>
+
+<% def(ctype_pch) %>
+<% elsedef %>
+
+<% def(ctype_chi)%>
+<input type="hidden" name="shi" value="chicken">
+<% elsedef %>
+<select name="shi" class="paint_select palette_type">
+	<option value="neo">PaintBBS NEO</option>
+	<option value="1">しぃペインター</option>
+	<option value="chicken">ChickenPaint</option>
+</select>
+
+<% /def %>
+<% /def %>
+
+
+
 <% def(use_select_palettes) %>
+
 	<span class="palette_type">PALETTE</span> <select name="selected_palette_no" title="パレット" class="paint_select palette_type"><% echo(palette_select_tags) %></select>
 		<% /def %>
 <span class="nk">削除キー<input type="password" name="pwd" size="8" value="" class="paint_password" autocomplete="current-password"></span>
 <!-- NEOを使う -->
 <% def(ctype_pch) %>
 <% elsedef %>
-<label class="use_neo checkbox"><input type="checkbox" name="useneo" checked="checked" />NEOを使う</label>
+<!-- <label class="use_neo checkbox"><input type="checkbox" name="useneo" checked="checked" />NEOを使う</label> -->
 <% /def %>
 <input type="submit" value="続きを描く">
 
-<% def(applet) %>
-<input type="hidden" name="shi" value="1">
-<% elsedef %>
-<input type="hidden" name="useneo" value="1">
-<% /def %>
 
 </form>
 <% ========== コンティニュー説明 ========== %>

@@ -21,7 +21,7 @@ define('LOG_MAX', '2000');
 //例えばおまけのnee2を使いたい場合は theme_nee2/ 、PINKを使いたい時は pink/ とします。
 //初期値は theme/ です。
 
-define('SKIN_DIR', 'theme/');
+define('SKIN_DIR', 'pink/');
 
 //メール通知のほか、シェアボタンなどで使用
 //設置場所のURL。phpのあるディレクトリの'/'まで

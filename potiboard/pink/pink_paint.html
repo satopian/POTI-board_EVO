@@ -47,9 +47,9 @@
 <script src="chickenpaint/lib/FileSaver.min.js"></script>
 <script src="chickenpaint/lib/bootstrap.min.js"></script>
 
-<script src="chickenpaint/resources/js/chickenpaint.js"></script>
+<script src="chickenpaint/js/chickenpaint.js"></script>
 
-<link rel="stylesheet" type="text/css" href="chickenpaint/resources/css/chickenpaint.css">
+<link rel="stylesheet" type="text/css" href="chickenpaint/css/chickenpaint.css">
 
 <% elsedef %>
 
@@ -170,8 +170,8 @@ uiElem: document.getElementById("chickenpaint-parent"),
 canvasWidth: <% echo(picw) %>,
 	canvasHeight: <% echo(pich) %>,
 
-loadImageUrl: "<% echo(imgfile) %>",
-loadChibiFileUrl: "<% echo(img_chi) %>",
+<% def(imgfile) %>loadImageUrl: "<% echo(imgfile) %>",<% /def %>
+<% def(img_chi) %>loadChibiFileUrl: "<% echo(img_chi) %>",<% /def %>
 saveUrl: "save.php?usercode=<% echo(usercode) %>",
 postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
 exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",

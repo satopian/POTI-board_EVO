@@ -1359,18 +1359,20 @@ function paintform(){
 	$ctype = newstring(filter_input(INPUT_POST, 'ctype'));
 	$quality = filter_input(INPUT_POST, 'quality',FILTER_VALIDATE_INT);
 	$no = filter_input(INPUT_POST, 'no',FILTER_VALIDATE_INT);
+	$is_mobile = filter_input(INPUT_POST, 'is_mobile',FILTER_VALIDATE_BOOLEAN);
 	
 	//Cookie保存
 	setcookie("appletc", $shi , time()+(86400*SAVE_COOKIE));//アプレット選択
 	setcookie("picwc", $picw , time()+(86400*SAVE_COOKIE));//幅
 	setcookie("pichc", $pich , time()+(86400*SAVE_COOKIE));//高さ
-	
-	$useneo=($shi==='neo');
+
+	$useneo=($shi==='neo');//プルダウンメニューによるNEO判定
 	if(!$useneo){//NEOを使うのチェックボックスがonなら、NEO
-		$useneo = filter_input(INPUT_POST, 'useneo',FILTER_VALIDATE_BOOLEAN);
+			$useneo = filter_input(INPUT_POST, 'useneo',FILTER_VALIDATE_BOOLEAN);
+	}
+	if(!$is_mobile){
+		$dat['chickenpaint']=($shi==='chicken');
 	} 
-	$dat['chickenpaint']=($shi==='chicken');
-	
 	
 	//pchファイルアップロードペイント
 	if($admin&&($admin===$ADMIN_PASS)){
@@ -1448,6 +1450,9 @@ function paintform(){
 			$dat['usepbbs'] = false;
 			$useneo=false;
 			$anime=true;
+		}
+		if(!$useneo){
+			$useneo=$is_mobile;//mobileの時はNEOしか起動しない。
 		}
 		if((C_SECURITY_CLICK || C_SECURITY_TIMER) && SECURITY_URL){
 			$dat['security'] = true;
@@ -1536,20 +1541,24 @@ function paintform(){
 	$pwd=openssl_encrypt ($pwd,CRYPT_METHOD, CRYPT_PASS, true, CRYPT_IV);//暗号化
 	$pwd=bin2hex($pwd);//16進数に
 	}
-	$resto = ($resto) ? '&amp;resto='.$resto : '';
+	$resto = ($resto) ? '&resto='.$resto : '';
 	$dat['mode'] = 'piccom'.$resto;
 	$dat['animeform'] = true;
 	$dat['anime'] = $anime ? true : false;
+	$_pch_ext = check_pch_ext(__DIR__.'/'.PCH_DIR.$pch);
+	if($is_mobile && ($_pch_ext==='.spch')){
+		$ctype='img';
+	}
 	if($ctype=='pch'){
-		if ($_pch_ext = check_pch_ext(__DIR__.'/'.PCH_DIR.$pch)) {
+		if ($_pch_ext) {
 			$dat['pchfile'] = './'.PCH_DIR.$pch.$_pch_ext;
 		}
 	}
-	if($ctype=='img'){
+	if($ctype=='img'){//画像または
 		$dat['animeform'] = false;
 		$dat['anime'] = false;
 		$dat['imgfile'] = './'.PCH_DIR.$pch.$ext;
-		if(is_file('./'.PCH_DIR.$pch.'.chi')){
+		if(!$is_mobile && is_file('./'.PCH_DIR.$pch.'.chi')){
 			$dat['img_chi'] = './'.PCH_DIR.$pch.'.chi';
 		}
 	}

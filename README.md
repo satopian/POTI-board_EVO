@@ -7,6 +7,11 @@
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
 
+### [2021/05/06] 
+- レスお絵かきのアプリの切替えに対応。
+- JavaScriptによるモバイル判定をHTMLに追加。
+- モバイルと判定された時はNEOしか起動しないようにした。
+- ChickenPaintのリソースディレクトリの位置関係を整理。
 
 ### [2021/05/05] 
 - PaintBBS NEO、しぃペインター、ChickenPaintを選択式にして、それぞれのお絵描きアプリを起動可能にした。

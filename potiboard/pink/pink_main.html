@@ -69,14 +69,26 @@
 <input type="submit" value="PAINT" class="paint_button">
 <!-- しぃペインター通常版 -->
 <!-- <input type="hidden" name="shi" value="1"> -->
-<span class="canvas_size">TOOL</span>
+<span class="select_applet bold_gray for_pc">TOOL</span>
 
-<select name="shi" class="canvas_select">
+<select name="shi" class="select_applet for_pc">
 	<option value="neo">PaintBBS NEO</option>
 	<option value="1">しぃペインター</option>
 	<option value="chicken">ChickenPaint</option>
 </select>
-
+<input type="hidden" name="is_mobile" id="is_mobile" value>
+<style id="for_mobile"></style>
+<script>
+function is_mobile() {
+if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
+if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) return true;
+return false;
+}
+if(is_mobile()){
+	document.getElementById("is_mobile").value = "true";
+	document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
+}
+</script>
 <!-- <input type="hidden" name="shi" value="1"> -->
 
 

@@ -166,16 +166,19 @@
 <script>
 
 new ChickenPaint({
-uiElem: document.getElementById("chickenpaint-parent"),
-canvasWidth: <% echo(picw) %>,
+	uiElem: document.getElementById("chickenpaint-parent"),
+	canvasWidth: <% echo(picw) %>,
 	canvasHeight: <% echo(pich) %>,
 
-<% def(imgfile) %>loadImageUrl: "<% echo(imgfile) %>",<% /def %>
-<% def(img_chi) %>loadChibiFileUrl: "<% echo(img_chi) %>",<% /def %>
-saveUrl: "save.php?usercode=<% echo(usercode) %>",
-postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
-exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
-resourcesRoot: "chickenpaint/"
+	<% def(imgfile) %>loadImageUrl: "<% echo(imgfile) %>",<% /def %>
+	<% def(img_chi) %>loadChibiFileUrl: "<% echo(img_chi) %>",<% /def %>
+	saveUrl: "save.php?usercode=<% echo(usercode) %>",
+	postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
+	exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
+	allowSave: true,
+	allowMultipleSends: false,
+
+	resourcesRoot: "chickenpaint/"
 });
 </script>
 <% elsedef %>
@@ -532,7 +535,7 @@ name="pch" code="pch.PCHViewer.class" archive="PCHViewer.jar,PaintBBS.jar" width
 <% def(ctype_chi)%>
 <input type="hidden" name="shi" value="chicken">
 <% elsedef %>
-<select name="shi" class="paint_select palette_type">
+<select name="shi" class="paint_select palette_type for_pc">
 	<option value="neo">PaintBBS NEO</option>
 	<option value="1">しぃペインター</option>
 	<option value="chicken">ChickenPaint</option>
@@ -554,9 +557,24 @@ name="pch" code="pch.PCHViewer.class" archive="PCHViewer.jar,PaintBBS.jar" width
 <!-- <label class="use_neo checkbox"><input type="checkbox" name="useneo" checked="checked" />NEOを使う</label> -->
 <% /def %>
 <input type="submit" value="続きを描く">
-
+<input type="hidden" name="is_mobile" id="is_mobile" value>
 
 </form>
+
+<style id="for_mobile"></style>
+<script>
+function is_mobile() {
+if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
+if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) return true;
+return false;
+}
+if(is_mobile()){
+	document.getElementById("is_mobile").value = "true";
+	document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
+}
+</script>
+
+
 <% ========== コンティニュー説明 ========== %>
 <div class="howtocontinue">
 		<ul id="up_desc">

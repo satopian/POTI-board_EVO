@@ -217,7 +217,15 @@
 <% ========== お絵かきアプレット ========== %>
 <input type="submit" value="PAINT" class="paint_button">
 <!-- しぃペインター通常版 -->
-<input type="hidden" name="shi" value="1">
+<span class="canvas_size">TOOL</span>
+
+<select name="shi" class="canvas_select">
+	<option value="neo">PaintBBS NEO</option>
+	<option value="1">しぃペインター</option>
+	<option value="chicken">ChickenPaint</option>
+</select>
+
+<!-- <input type="hidden" name="shi" value="1"> -->
 <% ===キャンバスサイズ 設定はconfig.phpで === %>
 <% def(n) %>
 <!--
@@ -264,7 +272,6 @@ PMAX_H //高さ
 	<% /def %>
 	
 <!-- NEOを使う -->
-<label class="checkbox use_neo"><input type="checkbox" name="useneo" checked="checked" />NEOを使う</label>
 <% def(anime) %><label class="checkbox use_animation"><input type="checkbox" value="true" name="anime"<% echo (animechk) %>>動画記録</label><% /def %>
 <% def(n) %>
 <!--

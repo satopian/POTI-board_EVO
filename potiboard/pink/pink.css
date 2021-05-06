@@ -1067,9 +1067,10 @@ input.copy_txt::selection {
 	.howtopaint,
 	.txtnon,
 	.article_info_painttime,label.use_neo,
-	.menu_pr,.res_menu_pr,.column_non {
+	.menu_pr,.res_menu_pr,.column_non,label.use_animation {
 		display: none;
 	}
+
 	.posted_image {
 		float: none;
 		margin-right: 0;
@@ -1127,9 +1128,6 @@ input.copy_txt::selection {
 	.post_input_com {
 		width: 98%;
 	}
-	label.use_animation {
-		display: none;
-		}
 	label.textonly:before{
 		top:0;
 	}

@@ -36,15 +36,13 @@ if (isset($_FILES["chibifile"])) {
 	$success = $success && move_uploaded_file($_FILES['chibifile']['tmp_name'], TEMP_DIR.$imgfile.'.chi');
 }
 
-if (isset($_FILES['swatches'])) {
-    $success = $success && move_uploaded_file($_FILES['swatches']['tmp_name'], TEMP_DIR.$imgfile.'.aco');
-}
+// if (isset($_FILES['swatches'])) {
+//     $success = $success && move_uploaded_file($_FILES['swatches']['tmp_name'], TEMP_DIR.$imgfile.'.aco');
+// }
 
 if (!$success) {
     chibi_die("Couldn't move uploaded files");
 }
-
-// die("CHIBIOK\n");
 
 $u_ip = getenv("HTTP_CLIENT_IP");
 if(!$u_ip) $u_ip = getenv("HTTP_X_FORWARDED_FOR");
@@ -57,30 +55,27 @@ $imgext='.png';
 $userdata = "$u_ip\t$u_host\t$u_agent\t$imgext";
 // 拡張ヘッダーを取り出す
 
-	$usercode = filter_input(INPUT_GET, 'usercode')?? '';
-	$repcode = filter_input(INPUT_GET, 'repcode')?? '';
-	$stime = filter_input(INPUT_GET, 'stime')?? '';
-	$resto = filter_input(INPUT_GET, 'resto')?? '';
+	$usercode = (string)filter_input(INPUT_GET, 'usercode');
+	$repcode = (string)filter_input(INPUT_GET, 'repcode');
+	$stime = (string)filter_input(INPUT_GET, 'stime');
+	$resto = (string)filter_input(INPUT_GET, 'resto');
 
 	//usercode 差し換え認識コード 描画開始 完了時間 レス先 を追加
 	$userdata .= "\t$usercode\t$repcode\t$stime\t$time\t$resto";
 $userdata .= "\n";
-// if(is_file(TEMP_DIR.$imgfile.".dat")){
-// 	error("同名の情報ファイルが存在します。上書きします。");
-// }
 // 情報データをファイルに書き込む
 $fp = fopen(TEMP_DIR.$imgfile.".dat","w");
 if(!$fp){
-	// // error("情報ファイルのオープンに失敗しました。投稿者情報は記録されません。");
-	exit;
-}else{
+    chibi_die("Your picture upload failed! Please try again!");
+}
+
 	flock($fp, LOCK_EX);
 	fwrite($fp, $userdata);
 	fflush($fp);
 	flock($fp, LOCK_UN);
 	fclose($fp);
 	chmod(TEMP_DIR.$imgfile.'.dat',PERMISSION_FOR_LOG);
-}
+
 
 die("CHIBIOK\n");
 

@@ -1368,7 +1368,7 @@ function paintform(){
 
 	$useneo=($shi==='neo');//プルダウンメニューによるNEO判定
 	if(!$useneo){//NEOを使うのチェックボックスがonなら、NEO
-			$useneo = filter_input(INPUT_POST, 'useneo',FILTER_VALIDATE_BOOLEAN);
+		$useneo = filter_input(INPUT_POST, 'useneo',FILTER_VALIDATE_BOOLEAN);
 	}
 	if(!$is_mobile){
 		$dat['chickenpaint']=($shi==='chicken');
@@ -1451,9 +1451,6 @@ function paintform(){
 			$useneo=false;
 			$anime=true;
 		}
-		if(!$useneo){
-			$useneo=$is_mobile;//mobileの時はNEOしか起動しない。
-		}
 		if((C_SECURITY_CLICK || C_SECURITY_TIMER) && SECURITY_URL){
 			$dat['security'] = true;
 			$dat['security_click'] = C_SECURITY_CLICK;
@@ -1466,6 +1463,10 @@ function paintform(){
 			$dat['security_timer'] = SECURITY_TIMER;
 		}
 		$dat['newpaint'] = true;
+	}
+
+	if(!$useneo){
+		$useneo=$is_mobile;//mobileの時はNEOしか起動しない。
 	}
 
 	if($picw < 300) $picw = 300;
@@ -1742,20 +1743,22 @@ function incontinue(){
 	//描画時間
 	$cptime=is_numeric($cptime) ? calcPtime($cptime) : $cptime; 
 	if(DSP_PAINTTIME) $dat['painttime'] = $cptime;
-	$dat['applet'] = true;
-	$dat['ctype_spch'] = false;
-	$dat['ctype_chi'] = false;
+	$dat['applet'] = true;//従来の条件のアプリの選択メニューを出すかどうか(旧タイプ互換)
+	$dat['select_app'] = true;//アプリの選択メニューを出すかどうか
 	if(is_file(PCH_DIR.$ctim.'.pch')){
 		$dat['ctype_pch'] = true;
 		$dat['applet'] = false;
-	}elseif(is_file(PCH_DIR.$ctim.'.spch')){
-		$dat['ctype_spch'] = true;
-		$dat['ctype_pch'] = true;
-		$dat['usepbbs'] = false;
-	}elseif(is_file(PCH_DIR.$ctim.'.chi')){
-		$dat['usepbbs'] = false;
+		$dat['select_app'] = false;
+		$dat['usepbbs'] = true;
+		$dat['app_to_use'] = "0";//NEOとJavaのPaintBBSどちらも"0"バイナリをチェックしてNEOならNEOが起動する
 		
-		$dat['ctype_chi'] = true;
+	}elseif(is_file(PCH_DIR.$ctim.'.spch')){
+		$dat['ctype_pch'] = true;
+		$dat['select_app'] = false;
+		$dat['app_to_use'] = "1";
+	}elseif(is_file(PCH_DIR.$ctim.'.chi')){
+		$dat['select_app'] = false;
+		$dat['app_to_use'] = 'chicken';
 	}
 	if(mime_content_type(IMG_DIR.$ctim.$cext)==='image/webp'){
 		$dat['applet'] = false;
@@ -2029,7 +2032,7 @@ function replace(){
 			//ワークファイル削除
 			safe_unlink($upfile);
 			safe_unlink($temppath.$file_name.".dat");
-					//chiファイルアップロード
+			//chiファイルアップロード
 			if(is_file($temppath.$file_name.'.chi')){
 				$src = $temppath.$file_name.'.chi';
 				$dst = PCH_DIR.$time.'.chi';

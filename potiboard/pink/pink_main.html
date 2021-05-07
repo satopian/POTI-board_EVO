@@ -81,7 +81,7 @@
 <script>
 function is_mobile() {
 if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
-if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) return true;
+if ((navigator.maxTouchPoints && navigator.maxTouchPoints > 1) && ( window.matchMedia && window.matchMedia('(max-device-width: 1024px)').matches))  return true;
 return false;
 }
 if(is_mobile()){

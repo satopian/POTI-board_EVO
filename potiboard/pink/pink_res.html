@@ -289,10 +289,11 @@ PMAX_H //高さ
 <style id="for_mobile"></style>
 <script>
 function is_mobile() {
-if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
-if ((navigator.maxTouchPoints && navigator.maxTouchPoints > 1) && ( window.matchMedia && window.matchMedia('(max-device-width: 1024px)').matches))  return true;
+// if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
+if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-device-width: 767px)').matches))  return true;
 return false;
 }
+// console.log(( window.matchMedia && window.matchMedia('(max-device-width: 767px)').matches));
 if(is_mobile()){
 	document.getElementById("is_mobile").value = "true";
 	document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
@@ -431,13 +432,12 @@ l(); //LoadCookie
 	OriginalScript - <a href="http://www.punyu.net/" target="_blank" rel="noopener noreferrer" title="POTI-board v1.32 (by ぷにゅねっと)">POTI-board</a>
 <span title="futaba.php v0.8 lot.031015 (by ふたば)">futaba.php</span> <a href="http://php.loglog.jp/" target="_blank" rel="noopener noreferrer" title="gazou.php v3.0 (by レッツPHP!)">gazou.php</a><br>
 <% def(paint) %>
-OekakiApplet - <a href="http://hp.vector.co.jp/authors/VA016309/" target="_blank" rel="noopener noreferrer" title="by しぃちゃん">Shi-Painter</a>
+OekakiApp - <a href="http://hp.vector.co.jp/authors/VA016309/" target="_blank" rel="noopener noreferrer" title="by しぃちゃん">Shi-Painter</a> , <a href="http://github.com/funige/neo/" target="_blank" rel="noopener noreferrer" title="by funige">PaintBBS NEO</a> , <a href="https://github.com/thenickdude/chickenpaint" target="_blank" rel="nofollow noopener noreferrer" title="by Nicholas Sherlock">ChickenPaint</a>
 <br>
 <% /def %>
 UseFunction - <span title="by WonderCatStudio">動的パレットスクリプト</span>
 <!--http://wondercatstudio.com/-->
 ，<a href="http://skinny.sx68.net/" target="_blank" rel="noopener noreferrer" title="Skinny">Skinny</a>
-，<a href="http://github.com/funige/neo/" target="_blank" rel="noopener noreferrer" title="by funige">PaintBBS NEO</a>
 </div>
 
 </footer>

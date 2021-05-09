@@ -1063,7 +1063,6 @@ input.copy_txt::selection {
 @media screen and (max-width: 767px) {
 
 	/* 767px以下の幅の場合に適用される */
-	#res_paint_form,
 	.howtopaint,
 	.txtnon,
 	.article_info_painttime,label.use_neo,

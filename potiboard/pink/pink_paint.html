@@ -37,19 +37,9 @@
 
 </script>
 
-<script src="chickenpaint/lib/raf.js"></script>
-<script src="chickenpaint/lib/es6-promise.min.js"></script>
-<script src="chickenpaint/lib/jquery-2.2.1.min.js"></script>
-<script src="chickenpaint/lib/pep.min.js"></script>
-<script src="chickenpaint/lib/pako-1.0.1-1.js"></script>
-<script src="chickenpaint/lib/keymaster.js"></script>
-<script src="chickenpaint/lib/EventEmitter.min.js"></script>
-<script src="chickenpaint/lib/FileSaver.min.js"></script>
-<script src="chickenpaint/lib/bootstrap.min.js"></script>
+<script src="chickenpaint/js/chickenpaint.js?210510"></script>
 
-<script src="chickenpaint/js/chickenpaint.js"></script>
-
-<link rel="stylesheet" type="text/css" href="chickenpaint/css/chickenpaint.css">
+<link rel="stylesheet" type="text/css" href="chickenpaint/css/chickenpaint.css?210510">
 
 <% elsedef %>
 
@@ -65,13 +55,13 @@
 		}
 	</script>
 <% def(useneo) %>
-<link rel="stylesheet" href="neo.css?<% echo(stime) %>" type="text/css" />
-<script src="neo.js?<% echo(stime) %>" charset="UTF-8"></script>
+<link rel="stylesheet" href="neo.css" type="text/css" />
+<script src="neo.js" charset="UTF-8"></script>
 <% /def %>
 <% def(pch_mode) %>
 <% def(type_neo) %>
-<link rel="stylesheet" href="neo.css?<% echo(stime) %>" type="text/css" />
-<script src="neo.js?<% echo(stime) %>" charset="UTF-8"></script>
+<link rel="stylesheet" href="neo.css" type="text/css" />
+<script src="neo.js" charset="UTF-8"></script>
 <% /def %>
 <% /def %>
 <!-- Javaが使えるかどうか判定 -->

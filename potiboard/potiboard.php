@@ -6,8 +6,8 @@ define('USE_DUMP_FOR_DEBUG','0');
 
 // POTI-board改二 
 // バージョン :
-define('POTI_VER','v2.26.8');
-define('POTI_LOT','lot.210426'); 
+define('POTI_VER','v2.30.0');
+define('POTI_LOT','lot.210510'); 
 
 /*
   (C) 2018-2021 POTI改 POTI-board redevelopment team
@@ -2381,6 +2381,7 @@ function delete_files ($path, $filename, $ext) {
 	safe_unlink(THUMB_DIR.$filename.'s.jpg');
 	safe_unlink(PCH_DIR.$filename.'.pch');
 	safe_unlink(PCH_DIR.$filename.'.spch');
+	safe_unlink(PCH_DIR.$filename.'.chi');
 }
 
 /**

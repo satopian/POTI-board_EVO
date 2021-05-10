@@ -6,6 +6,15 @@
 - 従来のPaintBBS NEO、しぃペインターに加え、ChickenPaintも使えるようにしたPOTI-boardです。  
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
+### [2021/05/10] 
+- ChickenPaintの作者の方がビルド済みの最新版を公開してくれました。
+- それにともないChickenPaintを2018年版から最新版にアップデート。
+- ChickenPaintディレクトリをいったん削除して入れ直してください。
+- テーマのHTMLのpink_paint.htmlを上書きアップデート。
+- potiboard.phpの更新をお願いします。
+- ChickenPaint独自フォーマット、.chiファイルの削除処理の実装をわすれていました。
+- 更新しないと、画像を差し換えたときにも古い.chiファイルが残ります。
+- 画像を削除しても.chiファイルが残ってしまいます。
 
 ### [2021/05/09] 
 - iPadでもChickenPaintを使えるようにしました。  

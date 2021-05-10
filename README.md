@@ -7,6 +7,12 @@
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
 
+### [2021/05/09] 
+- iPadでもChickenPaintを使えるようにしました。  
+- 具体的には、マルチタッチでデバイスの幅が767px以下の環境でmobile判定。
+- mobile判定されなかった時は、しぃペインターやChickenPaintの選択メニューが出ます。
+- iPadでもしぃペインターの選択画面がでますが現時点では使えるのか使えないのかわかりません。
+- 著作表示にChickenPaintを追加しました。
 ### [2021/05/06] 
 - レスお絵かきのアプリの切替えに対応。
 - JavaScriptによるモバイル判定をHTMLに追加。

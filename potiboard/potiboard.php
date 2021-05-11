@@ -6,8 +6,8 @@ define('USE_DUMP_FOR_DEBUG','0');
 
 // POTI-board改二 
 // バージョン :
-define('POTI_VER','v2.30.0');
-define('POTI_LOT','lot.210510'); 
+define('POTI_VER','v2.30.1');
+define('POTI_LOT','lot.210511'); 
 
 /*
   (C) 2018-2021 POTI改 POTI-board redevelopment team
@@ -140,6 +140,11 @@ defined('USE_CHECK_NO_FILE') or define('USE_CHECK_NO_FILE', '1');
 
 //描画時間を合計表示に する:1 しない:0 
 defined('TOTAL_PAINTTIME') or define('TOTAL_PAINTTIME', '1');
+
+//しぃペインターを使う 使う:1 使わない:0 
+defined('USE_SHI_PAINTER') or define('USE_SHI_PAINTER', '1');
+//ChickenPaintを使う 使う:1 使わない:0 
+defined('USE_CHICKENPAINT') or define('USE_CHICKENPAINT', '1');
 
 //パーミッション
 
@@ -304,6 +309,11 @@ function basicpart(){
 	$dat['paint'] = USE_PAINT ? true : false;
 	$dat['applet'] = APPLET ? true : false;
 	$dat['usepbbs'] = APPLET!=1 ? true : false;
+	
+	$dat['select_app'] =(USE_SHI_PAINTER||USE_CHICKENPAINT) ? true : false;//しぃペインターとChickenPaintを使うかどうか?
+	$dat['useneo_on'] =  (!USE_SHI_PAINTER && !USE_CHICKENPAINT) ? true : false;//アプリ切替を表示しないときはhiddenでNEOを選択
+	$dat['use_shi_painter'] = USE_SHI_PAINTER ? true : false;
+	$dat['use_chickenpaint'] = USE_CHICKENPAINT ? true : false;
 	$dat['ver'] = POTI_VER;
 	$dat['verlot'] = POTI_VERLOT;
 	$dat['tver'] = TEMPLATE_VER;
@@ -1388,7 +1398,7 @@ function paintform(){
 			$pchext=pathinfo($pchfilename, PATHINFO_EXTENSION);
 			$pchext=strtolower($pchext);//すべて小文字に
 			//拡張子チェック
-			if (!in_array($pchext, ['pch', 'spch'])) {
+			if (!in_array($pchext, ['pch','spch','chi'])) {
 				error(MSG045,$pchtmp);
 			}
 			$pchup = TEMP_DIR.'pchup-'.$time.'-tmp.'.$pchext;//アップロードされるファイル名
@@ -1404,11 +1414,15 @@ function paintform(){
 					$fp = fopen("$pchup", "rb");
 					$useneo=(fread($fp,3)==="NEO");
 					fclose($fp);
+					$dat['pchfile'] = $pchup;
 				} elseif($pchext==="spch"){
 					$shi=$shi ? $shi : 1;
 					$useneo=false;
+					$dat['pchfile'] = $pchup;
+				} elseif($pchext==="chi"){
+					$dat['chickenpaint']=true;
+					$dat['img_chi'] = $pchup;
 				}
-				$dat['pchfile'] = $pchup;
 			}
 		}
 	}

@@ -6,6 +6,10 @@
 - 従来のPaintBBS NEO、しぃペインターに加え、ChickenPaintも使えるようにしたPOTI-boardです。  
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
+### [2021/05/11] 
+- 管理画面から、ChickenPaint固有のレイヤー情報を保存している(拡張子 .chi)ファイルをアップデートしてキャンバスに読み込む機能を追加。
+- 変形時操作を行った時にツールパレットが縦長になる問題を修正。(pink_paint.htmlを上書きアップデート)
+- 画像の横幅が750px以上の時にはコメントを画像の下に表示。(pink_main.html,pink_res.htmlを上書きアップデート)
 ### [2021/05/10] 
 - ChickenPaintの作者の方がビルド済みの最新版を公開してくれました。
 - それにともないChickenPaintを2018年版から最新版にアップデート。

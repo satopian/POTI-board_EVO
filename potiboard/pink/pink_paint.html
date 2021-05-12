@@ -154,11 +154,12 @@
 
 <div id="chickenpaint-parent"></div>
 <p></p>
-<script>
 
-new ChickenPaint({
-	uiElem: document.getElementById("chickenpaint-parent"),
-	canvasWidth: <% echo(picw) %>,
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    new ChickenPaint({
+        uiElem: document.getElementById("chickenpaint-parent"),
+		canvasWidth: <% echo(picw) %>,
 	canvasHeight: <% echo(pich) %>,
 
 	<% def(imgfile) %>loadImageUrl: "<% echo(imgfile) %>",<% /def %>
@@ -166,12 +167,15 @@ new ChickenPaint({
 	saveUrl: "save.php?usercode=<% echo(usercode) %>",
 	postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
 	exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
-	allowSave: true,
-	allowMultipleSends: false,
 
-	resourcesRoot: "chickenpaint/"
-});
+        allowDownload: true,
+        resourcesRoot: "chickenpaint/",
+        disableBootstrapAPI: true
+	});
+})
 </script>
+
+
 <% elsedef %>
 
 <nav>
@@ -500,24 +504,20 @@ name="pch" code="pch.PCHViewer.class" archive="PCHViewer.jar,PaintBBS.jar" width
       <br>
 <% def(n) %>
 <!--
-//コメントアウト
-{def applet) 
-アプレット<select name="shi" class="paint_select">
-{def usepbbs) 
-<option value="0">PaintBBS</option>
-{/def) 
-<option value=1>しぃペインター</option>
-<option value=2>しぃペインターPro</option> 
-</select>
-{/def) 
+//select_app ツールの選択メニューを出す時にtrueが入る
+//use_shi_painter しぃペインターを使う設定の時にtrueが入る
+//use_chickenpaint を使う設定の時にtrueが入る
+//app_to_use 動画やレイヤー情報などの固有形式があるときに対応するアプリが入る
 -->
+
+app_to_use
 <% /def %>
 
 <% def(select_app)%>
 <select name="shi" class="paint_select palette_type for_pc">
 	<option value="neo">PaintBBS NEO</option>
-	<option value="1">しぃペインター</option>
-	<option value="chicken">ChickenPaint</option>
+	<% def(use_shi_painter) %><option value="1">しぃペインター</option><% /def %>
+	<% def(use_chickenpaint) %><option value="chicken">ChickenPaint</option><% /def %>
 </select>
 <% /def %>
 <% def(app_to_use) %>
@@ -567,7 +567,7 @@ l(); //LoadCookie
 <footer>
 	<div class="copyright">
 		<!-- GazouBBS v3.0 --><!-- ふたば改0.8 --><!-- POTI-board -->
-		<a href="https://pbbs.sakura.ne.jp/poti/" target="_blank" rel="noopener noreferrer" title="POTI-board改二 <% echo (verlot) %>"><b>POTI-board改二 <% echo (ver) %></b></a>
+		<a href="https://pbbs.sakura.ne.jp/poti/" target="_blank" rel="noopener noreferrer" title="POTI-board EVO <% echo (verlot) %>"><b>POTI-board EVO <% echo (ver) %></b></a>
 			<span class="webstyle_wrap">Web Style by <a href="https://draclaw.com/" target="_blank" rel="noopener noreferrer" title="Cool Solid (by ドラ☆クロウ！)"><b>Cool Solid</b></a> &amp; <a href="https://github.com/satopian/pink_for_poti-kaini" target="_blank" rel="noopener noreferrer" title="PINK <% echo (tver) %> (by さとぴあ)"><b>PINK</b></a></span><br>
 			OriginalScript - <a href="http://www.punyu.net/" target="_blank" rel="noopener noreferrer" title="POTI-board v1.32 (by ぷにゅねっと)">POTI-board</a>
 		<span title="futaba.php v0.8 lot.031015 (by ふたば)">futaba.php</span> <a href="http://php.loglog.jp/" target="_blank" rel="noopener noreferrer" title="gazou.php v3.0 (by レッツPHP!)">gazou.php</a><br>

@@ -311,7 +311,7 @@ function basicpart(){
 	$dat['usepbbs'] = APPLET!=1 ? true : false;
 	
 	$dat['select_app'] =(USE_SHI_PAINTER||USE_CHICKENPAINT) ? true : false;//しぃペインターとChickenPaintを使うかどうか?
-	$dat['useneo_on'] =  (!USE_SHI_PAINTER && !USE_CHICKENPAINT) ? true : false;//アプリ切替を表示しないときはhiddenでNEOを選択
+	// $dat['useneo_on'] =  (!USE_SHI_PAINTER && !USE_CHICKENPAINT) ? true : false;//アプリ切替を表示しないときはhiddenでNEOを選択
 	$dat['use_shi_painter'] = USE_SHI_PAINTER ? true : false;
 	$dat['use_chickenpaint'] = USE_CHICKENPAINT ? true : false;
 	$dat['ver'] = POTI_VER;

@@ -1,6 +1,6 @@
 <?php
 /*
-  * POTI-board改二 v2.26.8 lot.210426
+  * POTI-board EVO v3.0.0 lot.210512 
   * by POTI改 >> https://pbbs.sakura.ne.jp/poti/
   *
   * POTI-board改二の設定ファイルです。
@@ -44,6 +44,12 @@ define('USE_IMG_UPLOAD','1');
 //画像のないコメントのみの新規投稿を拒否する する:1 しない:0
 define('DENY_COMMENTS_ONLY', '0');
 //する:1 でも管理画面からはコメントのみの投稿ができます。
+
+//しぃペインターを使う 使う:1 使わない:0 
+define('USE_SHI_PAINTER', '0');
+//ChickenPaintを使う 使う:1 使わない:0 
+define('USE_CHICKENPAINT', '1');
+//PaintBBS NEOはどの設定でも起動します。
 
 /*----------絶対に設定が必要な項目はここまでです。ここから下は必要に応じて。----------*/
 
@@ -210,9 +216,6 @@ define('DO_NOT_CHANGE_POSTS_TIME', '0');
 
 //お絵かき機能を使用する お絵かきのみ:2 する:1 しない:0
 define('USE_PAINT', '2');
-
-//利用するアプレット PaintBBS:0 しぃペインター:1 両方:2
-define('APPLET', '2');
 
 //お絵描き最大サイズ（これ以上は強制でこの値
 //最小値は幅、高さともに 300 固定です
@@ -410,6 +413,10 @@ define('TOTAL_PAINTTIME', '1');
 define('USE_CHECK_NO_FILE', '0');
 //テンプレートが対応していない時は する:1。
 //テンプレートが対応していれば しない:0 で「画像なし」のチェックボックスを表示しません。
+
+//利用するアプレット PaintBBS:0 しぃペインター:1 両方:2
+define('APPLET', '2');
+
 
 /* ------------- トラブルシューティング ------------- */
 

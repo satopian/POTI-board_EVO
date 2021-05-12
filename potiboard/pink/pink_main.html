@@ -64,18 +64,28 @@
 <div class="clear"></div>
 <% ========== お絵かきフォーム欄 ========== %>
 <% ========== 実際のお絵かきフォーム ========== %>
+<% def(n) %>
+<!--
+//select_app ツールの選択メニューを出す時にtrueが入る
+//use_shi_painter しぃペインターを使う設定の時にtrueが入る
+//use_chickenpaint を使う設定の時にtrueが入る
+-->
+<% /def %>
+
 <% def(paint) %>
 <form action="<% echo (self) %>" method="post">
-<input type="submit" value="PAINT" class="paint_button">
-<!-- しぃペインター通常版 -->
-<!-- <input type="hidden" name="shi" value="1"> -->
-<span class="select_applet bold_gray for_pc">TOOL</span>
-
-<select name="shi" class="select_applet for_pc">
+	<input type="submit" value="PAINT" class="paint_button">
+	<% def(select_app) %>
+	<span class="select_applet bold_gray for_pc">TOOL</span>
+	<select name="shi" class="select_applet for_pc">
 	<option value="neo">PaintBBS NEO</option>
-	<option value="1">しぃペインター</option>
-	<option value="chicken">ChickenPaint</option>
+	<% def(use_shi_painter) %><option value="1">しぃペインター</option><% /def %>
+	<% def(use_chickenpaint) %><option value="chicken">ChickenPaint</option><% /def %>
 </select>
+<% elsedef %>
+<!-- 選択メニューを出さない時に起動するアプリ -->
+<input type="hidden" name="shi" value="neo">
+<% /def %>
 <input type="hidden" name="is_mobile" id="is_mobile" value>
 <style id="for_mobile"></style>
 <script>
@@ -90,7 +100,6 @@ if(is_mobile()){
 }
 </script>
 <!-- <input type="hidden" name="shi" value="1"> -->
-
 
 
 <% ===キャンバスサイズ 設定はconfig.phpで === %>
@@ -495,7 +504,7 @@ l(); //LoadCookie
 
 <div class="copyright">
 	<!-- GazouBBS v3.0 --><!-- ふたば改0.8 --><!-- POTI-board -->
-	<a href="https://pbbs.sakura.ne.jp/poti/" target="_blank" rel="noopener noreferrer" title="POTI-board改二 <% echo (verlot) %>"><b>POTI-board改二 <% echo (ver) %></b></a>
+	<a href="https://pbbs.sakura.ne.jp/poti/" target="_blank" rel="noopener noreferrer" title="POTI-board EVO <% echo (verlot) %>"><b>POTI-board EVO <% echo (ver) %></b></a>
 		<span class="webstyle_wrap">Web Style by <a href="https://draclaw.com/" target="_blank" rel="noopener noreferrer" title="Cool Solid (by ドラ☆クロウ！)"><b>Cool Solid</b></a> &amp; <a href="https://github.com/satopian/pink_for_poti-kaini" target="_blank" rel="noopener noreferrer" title="PINK <% echo (tver) %> (by さとぴあ)"><b>PINK</b></a></span><br>
 		OriginalScript - <a href="http://www.punyu.net/" target="_blank" rel="noopener noreferrer" title="POTI-board v1.32 (by ぷにゅねっと)">POTI-board</a>
 	<span title="futaba.php v0.8 lot.031015 (by ふたば)">futaba.php</span> <a href="http://php.loglog.jp/" target="_blank" rel="noopener noreferrer" title="gazou.php v3.0 (by レッツPHP!)">gazou.php</a><br>

@@ -1,4 +1,4 @@
-# POTI-board ChickenPaint 対応版
+# POTI-board EVO ChickenPaint 対応版
 
 ## 概要
 ![image](https://user-images.githubusercontent.com/44894014/117165096-293c9000-ae00-11eb-91f7-88a4fb26eb8c.png)  

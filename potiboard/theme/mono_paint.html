@@ -21,34 +21,17 @@
 		<% /def %>
 		<!-- Javaが使えるかどうか判定 使えなければcheerpJをロード -->
 		<% def(chickenpaint)%>
-		<style>
-			#appstage {
-		display: inherit;
- 		text-align: center;
-		}
+<script type="text/javascript">
+	/* Check for native pointer event support before PEP adds its polyfill */
+	if (window.PointerEvent) {
+		window.hasNativePointerEvents = true;
+	}
 
-		</style>
-		<script type="text/javascript">
-			/* Check for native pointer event support before PEP adds its polyfill */
-			if (window.PointerEvent) {
-				window.hasNativePointerEvents = true;
-			}
-		
-		</script>
-		
-		<script src="chickenpaint/lib/raf.js"></script>
-		<script src="chickenpaint/lib/es6-promise.min.js"></script>
-		<script src="chickenpaint/lib/jquery-2.2.1.min.js"></script>
-		<script src="chickenpaint/lib/pep.min.js"></script>
-		<script src="chickenpaint/lib/pako-1.0.1-1.js"></script>
-		<script src="chickenpaint/lib/keymaster.js"></script>
-		<script src="chickenpaint/lib/EventEmitter.min.js"></script>
-		<script src="chickenpaint/lib/FileSaver.min.js"></script>
-		<script src="chickenpaint/lib/bootstrap.min.js"></script>
-		
-		<script src="chickenpaint/resources/js/chickenpaint.js"></script>
-		
-		<link rel="stylesheet" type="text/css" href="chickenpaint/resources/css/chickenpaint.css">
+</script>
+
+<script src="chickenpaint/js/chickenpaint.min.js?210512"></script>
+<link rel="stylesheet" type="text/css" href="chickenpaint/css/chickenpaint.css?210512">
+
 
 		<% elsedef %>
 		<script>
@@ -106,9 +89,11 @@
 		<title><% echo(title) %></title>
 	</head>
 	<body id="paintmode">
-		<% def(paint_mode) %>
-		<% elsedef %>
+		
+		
 		<% def(chickenpaint)%>
+
+
 		<% elsedef %>
 
 		<header>
@@ -131,7 +116,6 @@
 			<h2 class="oekaki">CONTINUE MODE</h2>
 			<% /def %>
 		</header>
-		<% /def %>
 		<% /def %>
 
 		<main>
@@ -170,24 +154,29 @@
 
 		<% def(chickenpaint) %>
 
-					<div id="chickenpaint-parent"></div>
-					<p></p>
-				<script>
+		<div id="chickenpaint-parent"></div>
+		<p></p>
 		
-		new ChickenPaint({
-			uiElem: document.getElementById("chickenpaint-parent"),
-			canvasWidth: <% echo(picw) %>,
-						canvasHeight: <% echo(pich) %>,
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			new ChickenPaint({
+				uiElem: document.getElementById("chickenpaint-parent"),
+				canvasWidth: <% echo(picw) %>,
+			canvasHeight: <% echo(pich) %>,
 		
-			loadImageUrl: "<% echo(imgfile) %>",
-			loadChibiFileUrl: "<% echo(img_chi) %>",
+			<% def(imgfile) %>loadImageUrl: "<% echo(imgfile) %>",<% /def %>
+			<% def(img_chi) %>loadChibiFileUrl: "<% echo(img_chi) %>",<% /def %>
 			saveUrl: "save.php?usercode=<% echo(usercode) %>",
 			postUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
 			exitUrl: "?mode=<% echo(mode) %>&stime=<% echo(stime) %>",
-			resourcesRoot: "chickenpaint/"
-		});
-				</script>
-				<% elsedef %>
+		
+				allowDownload: true,
+				resourcesRoot: "chickenpaint/",
+				disableBootstrapAPI: true
+			});
+		})
+		</script>
+						<% elsedef %>
 		
 
 
@@ -573,23 +562,43 @@
 							<option value="rep">replace</option>
 							<option value="new">newpost</option>
 						</select>
+						<% def(select_app)%>
+
+						<select name="shi" class="for_pc">
+							<option value="neo">PaintBBS NEO</option>
+							<% def(use_shi_painter) %><option value="1">しぃペインター</option><% /def %>
+							<% def(use_chickenpaint) %><option value="chicken">ChickenPaint</option><% /def %>
+						</select>
+						<% elsedef %>
+						<!-- 選択メニューを出さない時に起動するアプリ -->
+						<input type="hidden" name="shi" value="neo">
+						<% /def %>
+						<% def(app_to_use) %>
+						<input type="hidden" name="shi" value="<% echo(app_to_use) %>">
+						<% /def %>
+
 						<% def(use_select_palettes) %>
 							パレット：<select name="selected_palette_no" title="パレット" class="form"><% echo(palette_select_tags) %></select>
 							<% /def %>
 
 						<% def(passflag) %>Pass<input class="form" type="password" name="pwd" size="8" value=""> <% /def %>
 						<input class="button" type="submit" value="続きを描く">
-						<!-- NEOを使う -->
-						<% if(ctype_pch,==,false) %>
-						<label><input type="checkbox" name="useneo" checked="checked" /><span class="use_neo">USE NEO</span></label>
-						<% /if %>
-						<% def(applet) %>
-						<input type="hidden" name="shi" value="1">
-						<% elsedef %>
-						<input type="hidden" name="useneo" value="1">
-						<% /def %>
+						<input type="hidden" name="is_mobile" id="is_mobile" value>
+
 					</form>
-					<% def(passflag) %>
+					<style id="for_mobile"></style>
+
+					<script>
+						function is_mobile() {
+						if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-device-width: 533px)').matches))  return true;
+						return false;
+						}
+						if(is_mobile()){
+							document.getElementById("is_mobile").value = "true";
+							document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
+						}
+						</script>
+						
 					<ul>
 						<% def(newpost_nopassword) %>
 						<li>新規投稿なら削除キーがなくても続きを描く事ができます。</li>
@@ -597,7 +606,6 @@
 						<li>続きを描くには描いたときの削除キーが必要です。</li>
 						<% /def %>
 						</ul>
-					<% /def %>
 				</div>
 				<script type="text/javascript">
 				l(); //LoadCookie
@@ -611,7 +619,7 @@
 				<!-- 著作権表示 削除しないでください -->
 				<!-- GazouBBS v3.0 --><!-- ふたば改0.8 --><!-- POTI-board -->
 				<p>
-					<a href="https://pbbs.sakura.ne.jp/poti/" target="_top" title="POTI-board改二 <% echo(verlot) %>">POTI-board改二 <% echo(ver) %></a>
+					<a href="https://pbbs.sakura.ne.jp/poti/" target="_top" title="POTI-board EVO <% echo(verlot) %>">POTI-board EVO <% echo(ver) %></a>
 					Web Style by <a href="https://pbbs.sakura.ne.jp/poti/" target="_top" title="MONO <% echo(tver) %>">MONO</a>
 				</p>
 				<p>

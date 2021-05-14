@@ -4,10 +4,10 @@ define('USE_DUMP_FOR_DEBUG','0');
 //HTML出力の前に$datをdump しない:0 する:1 dumpしてexit：2 
 // ini_set('error_reporting', E_ALL);
 
-// POTI-board改二 
+// POTI-board EVO
 // バージョン :
-define('POTI_VER','v2.30.1');
-define('POTI_LOT','lot.210511'); 
+define('POTI_VER','v3.00.1');
+define('POTI_LOT','lot.210514'); 
 
 /*
   (C) 2018-2021 POTI改 POTI-board redevelopment team
@@ -1758,7 +1758,6 @@ function incontinue(){
 	$cptime=is_numeric($cptime) ? calcPtime($cptime) : $cptime; 
 	if(DSP_PAINTTIME) $dat['painttime'] = $cptime;
 	$dat['applet'] = true;//従来の条件のアプリの選択メニューを出すかどうか(旧タイプ互換)
-	$dat['select_app'] = true;//アプリの選択メニューを出すかどうか
 	if(is_file(PCH_DIR.$ctim.'.pch')){
 		$dat['ctype_pch'] = true;
 		$dat['applet'] = false;
@@ -1776,6 +1775,7 @@ function incontinue(){
 	}
 	if(mime_content_type(IMG_DIR.$ctim.$cext)==='image/webp'){
 		$dat['applet'] = false;
+		$dat['use_shi_painter'] = false; 
 	}
 	$dat['addinfo'] = $addinfo;
 	htmloutput(SKIN_DIR.PAINTFILE,$dat);

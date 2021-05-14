@@ -6,6 +6,13 @@
 - 従来のPaintBBS NEO、しぃペインターに加え、ChickenPaintも使えるようにしたPOTI-boardです。  
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
+### 
+- 圧縮済みの`chickenpaint.min.js`を使うようにした。
+- pink_paint.htmlを上書きアップデート。
+- タブレット端末の表示上の横幅が534px以上の時はChickenPaintを選択できるようにした。
+- pink_main.htmlとpink_res.htmlを上書きアップデート。
+
+
 ### [2021/05/12]
 - しぃペインターとChickenPaintを使う使わないを選択できるようにした。どちらも使わない時は選択メニューが消えてNEOが起動します。potiboard.phpを上書きアップデート。
 - しぃペインターとChickenPaintを使う使わないを選択するときは、config.phpのアップデートが必要です。どちらも使う時はconfig.phpのアップデートの必要はありません。

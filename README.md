@@ -10,7 +10,7 @@ DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index
 - 圧縮済みの`chickenpaint.min.js`を使うようにした。
 - pink_paint.htmlを上書きアップデート。
 - タブレット端末の表示上の横幅が534px以上の時はChickenPaintを選択できるようにした。
-- pink_main.htmlとpink_res.htmlを上書きアップデート。
+- `pink_main.html`と`pink_res.html`を上書きアップデート。
 
 
 ### [2021/05/12]

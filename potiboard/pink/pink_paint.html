@@ -21,7 +21,7 @@
 <% def(pch_mode) %><meta name="viewport" content="width=device-width,initial-scale=1.0"><% /def %>
 <% def(continue_mode) %><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"><% /def %>
 <link rel="stylesheet" type="text/css" href="<% echo(skindir) %>pink.css">
-<style>div#chickenpaint-parent {letter-spacing: initial;word-break:initial;}</style>
+<style>div#chickenpaint-parent {letter-spacing: initial;word-break:initial;}li{margin:0 0 0 1em;}</style>
 <title><% def(paint_mode) %>お絵かきモード<% /def %><% def(continue_mode) %>続きを描く<% /def %><% def(pch_mode) %>動画表示モード<% /def %> - <% echo(title) %></title>
 <% def(n) %>
 <!-- 
@@ -509,8 +509,6 @@ name="pch" code="pch.PCHViewer.class" archive="PCHViewer.jar,PaintBBS.jar" width
 //use_chickenpaint を使う設定の時にtrueが入る
 //app_to_use 動画やレイヤー情報などの固有形式があるときに対応するアプリが入る
 -->
-
-app_to_use
 <% /def %>
 
 <% def(select_app)%>
@@ -540,7 +538,7 @@ app_to_use
 <script>
 function is_mobile() {
 // if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
-if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-device-width: 533px)').matches))  return true;
+if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 533px)').matches))  return true;
 return false;
 }
 if(is_mobile()){

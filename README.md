@@ -7,11 +7,7 @@
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
 ### 
-- 圧縮済みの`chickenpaint.min.js`を使うようにした。
-- pink_paint.htmlを上書きアップデート。
-- タブレット端末の表示上の横幅が534px以上の時はChickenPaintを選択できるようにした。
-- `pink_main.html`と`pink_res.html`を上書きアップデート。
-### [2021/06/05] v3.01.6 lot.210605
+### [2021/06/05] v3.01.8 lot.210605
 - 管理画面のページング
 記事が6000件あると、管理者削除画面に6000件分表示していましたが、それを2000件単位でページ送りできるようになりました。
 - ページングの改良
@@ -26,7 +22,11 @@ DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index
 - potiboard.phpを上書きアップデート
 - search.phpを上書きアップデート
 
-
+### [2021/05/15] 
+- 圧縮済みの`chickenpaint.min.js`を使うようにした。
+- pink_paint.htmlを上書きアップデート。
+- タブレット端末の表示上の横幅が534px以上の時はChickenPaintを選択できるようにした。
+- pink_main.htmlとpink_res.htmlを上書きアップデート。
 ### [2021/05/12]
 - しぃペインターとChickenPaintを使う使わないを選択できるようにした。どちらも使わない時は選択メニューが消えてNEOが起動します。potiboard.phpを上書きアップデート。
 - しぃペインターとChickenPaintを使う使わないを選択するときは、config.phpのアップデートが必要です。どちらも使う時はconfig.phpのアップデートの必要はありません。

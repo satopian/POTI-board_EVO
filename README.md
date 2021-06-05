@@ -11,6 +11,20 @@ DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index
 - pink_paint.htmlを上書きアップデート。
 - タブレット端末の表示上の横幅が534px以上の時はChickenPaintを選択できるようにした。
 - `pink_main.html`と`pink_res.html`を上書きアップデート。
+### [2021/06/05] v3.01.6 lot.210605
+- 管理画面のページング
+記事が6000件あると、管理者削除画面に6000件分表示していましたが、それを2000件単位でページ送りできるようになりました。
+- ページングの改良
+35頁単位でページ送りできるようになりました。
+- ChickenPaintの日本語対応が一通り完了しました。
+- CheerpJ Applet Runnerが起動しない問題に対応しました。
+
+更新が必要なファイル。
+- Chickenpaint ディレクトリを上書きアップデート
+- Paintとotherのテンプレートを上書きアップデート
+- MONOのcssファイルを上書きアップデート
+- potiboard.phpを上書きアップデート
+- search.phpを上書きアップデート
 
 
 ### [2021/05/12]

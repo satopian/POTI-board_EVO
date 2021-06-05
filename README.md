@@ -15,8 +15,8 @@ DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index
 35頁単位でページング 。  
 - ChickenPaintの日本語対応が一通り完了しました。
 - CheerpJ Applet Runnerが起動しない問題に対応しました。  
-CheerpJの起動に必要なJavaScriptのurlをpotiboard.phpで管理。
-更新が必要なファイル。
+CheerpJの起動に必要なJavaScriptのurlをpotiboard.phpで管理。  
+#### 更新が必要なファイル。
 - Chickenpaint ディレクトリを上書きアップデート
 - Paintとotherのテンプレートを上書きアップデート
 - MONOのcssファイルを上書きアップデート

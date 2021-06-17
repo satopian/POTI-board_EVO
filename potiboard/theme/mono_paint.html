@@ -20,13 +20,20 @@
 		<script src="neo.js<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>" charset="UTF-8"></script>
 		<% /def %>
 		<% def(chickenpaint)%>
-<script type="text/javascript">
-	/* Check for native pointer event support before PEP adds its polyfill */
-	if (window.PointerEvent) {
-		window.hasNativePointerEvents = true;
-	}
-
-</script>
+		<style>
+		div#chickenpaint-parent :not(input){
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		</style>
+		<script>
+		/* Check for native pointer event support before PEP adds its polyfill */
+		if (window.PointerEvent) {
+			window.hasNativePointerEvents = true;
+		}
+		</script>
 
 <script src="chickenpaint/js/chickenpaint.min.js<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>"></script>
 <link rel="stylesheet" type="text/css" href="chickenpaint/css/chickenpaint.css<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>">
@@ -41,7 +48,7 @@
 		var jEnabled = navigator.javaEnabled();
 		if(!jEnabled){
 			var sN = document.createElement("script");
-            sN.src = "<% def(cheerpj_url)%><% echo(cheerpj_url)%><% elsedef %>https://cjrtnc.leaningtech.com/2.2/loader.js<% /def %>";
+			sN.src = "<% def(cheerpj_url)%><% echo(cheerpj_url)%><% elsedef %>https://cjrtnc.leaningtech.com/2.2/loader.js<% /def %>";
 			var s0 = document.getElementsByTagName("script")[0];
 			s0.parentNode.insertBefore(sN, s0);
 			sN.addEventListener("load", function(){ cheerpjInit(); }, false);
@@ -52,12 +59,18 @@
 		</script>
 		<% /def %>
 
-		<script type="text/javascript">
+		<script>
 			var css = GetCookie("CSS");
 			if(css == ""){css = "<% echo(skindir) %>css/mono_main.css";}
-			document.write('<link rel="stylesheet" href="' + css + '" type="text/css">');
-			function SetCss(file){
+			var link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href =  css ;
+			document.getElementsByTagName("head")[0].appendChild(link);
+			function SetCss(obj){
+				var idx = obj.selectedIndex;
+				file = obj.options[idx].value;
 				SetCookie("CSS", file);
+				SetCookie("colorIdx",idx);
 				window.location.reload();
 			}
 			function GetCookie(key){
@@ -67,7 +80,7 @@
 					tmp = tmp.substring(tmp1, tmp.length);
 					var start = tmp.indexOf("=", 0) + 1;
 					var end = tmp.indexOf(";", start);
-					return(unescape(tmp.substring(start,end)));
+					return(decodeURIComponent(tmp.substring(start,end)));
 					}
 				return("");
 			}

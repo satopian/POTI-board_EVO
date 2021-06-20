@@ -7,7 +7,12 @@
 - 従来のPaintBBS NEO、しぃペインターに加え、ChickenPaintも使えるようにしたPOTI-boardです。  
 
 DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
-### 
+### [2021/06/17] v3.02.0 lot.210617
+- ChickenPaintの画面が選択される問題に対応。
+- PaintBBS NEOとしぃペインターの時は、Windows inkや二本指によるジェスチャーでブラウザバックしないようにした。
+- potiboard.phpのコードを整理。globaL変数削減、コンティニュー時の処理をまとめた。
+- MONOのCSS切り替えをプルダウンメニューに。
+
 ### [2021/06/05] v3.01.9 lot.210605
 - 管理画面のページング
 2000件単位で改ページ。  

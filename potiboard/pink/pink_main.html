@@ -22,6 +22,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 <link rel="stylesheet" href="<% echo(skindir) %>pink.css">
 <link rel="stylesheet" href="<% echo(skindir) %>icomoon/style.css">
+<style>span.canvas_size_wrap {display: inline-block;padding: 8px 0 0;}</style>
+<style id="for_mobile"></style>
 <title><% echo (title) %></title>
 <% def(n) %>
 <!--
@@ -43,11 +45,11 @@
 <div class="bbsmenu">
 [<a href="<% echo (home) %>" target="_top">ホーム</a>]
 [<a href="<% echo (self) %>?mode=catalog">カタログ</a>]
-<% def(upfile) %>
-[<a href="<% echo (self) %>?mode=newpost"><span class="txtnon">新規</span>投稿</a>]
+<% def(for_new_post) %>
+[<a href="<% echo (self) %>?mode=newpost"><span class="menu_none">新規</span>投稿</a>]
 <% /def %>
-<span class="menu_none">[<a href="<% echo (self) %>?mode=piccom">未投稿画像</a>]</span>
-[<a href="<% echo (self) %>?mode=admin">管理<span class="txtnon">用</span></a>]
+[<a href="<% echo (self) %>?mode=piccom">未<span class="menu_none">投稿画像</span></a>]</span>
+[<a href="<% echo (self) %>?mode=admin">管<span class="menu_none">理用</span></a>]
 <a href="#bottom">▽</a>
 <% def(n) %>
 <!--
@@ -71,35 +73,30 @@
 //use_chickenpaint を使う設定の時にtrueが入る
 -->
 <% /def %>
+<script>
+function is_mobile() {
+if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 769px)').matches))  return true;
+return false;
+}
+if(is_mobile()){
+	document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
+}
+</script>
 
 <% def(paint) %>
 <form action="<% echo (self) %>" method="post">
 	<input type="submit" value="PAINT" class="paint_button">
 	<% def(select_app) %>
-	<span class="select_applet bold_gray for_pc">TOOL</span>
-	<select name="shi" class="select_applet for_pc">
+	<span class="select_applet bold_gray">TOOL</span>
+	<select name="shi" class="select_applet">
 	<option value="neo">PaintBBS NEO</option>
-	<% def(use_shi_painter) %><option value="1">しぃペインター</option><% /def %>
+	<% def(use_shi_painter) %><option value="1" class="for_pc">しぃペインター</option><% /def %>
 	<% def(use_chickenpaint) %><option value="chicken">ChickenPaint</option><% /def %>
 </select>
 <% elsedef %>
 <!-- 選択メニューを出さない時に起動するアプリ -->
 <input type="hidden" name="shi" value="neo">
 <% /def %>
-<input type="hidden" name="is_mobile" id="is_mobile" value>
-<style id="for_mobile"></style>
-<script>
-function is_mobile() {
-// if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) return true;
-if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 533px)').matches))  return true;
-return false;
-}
-if(is_mobile()){
-	document.getElementById("is_mobile").value = "true";
-	document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
-}
-</script>
-<!-- <input type="hidden" name="shi" value="1"> -->
 
 
 <% ===キャンバスサイズ 設定はconfig.phpで === %>
@@ -115,7 +112,7 @@ PMAX_H //高さ
 が入ります。
 -->
 <% /def %>
-<span class="nk">
+<span class="canvas_size_wrap">
 <span class="canvas_size">Size</span>
 <select name="picw" title="幅" class="canvas_select">
 	<?php
@@ -144,16 +141,17 @@ PMAX_H //高さ
 		}
 	?>
 	</select> 
-<% ===キャンバスサイズ ここまで === %>
 </span>
+<% ===キャンバスサイズ ここまで === %>
 
 <% def(use_select_palettes) %>
 	<span class="palette_type bold_gray">PALETTE</span> <select name="selected_palette_no" title="パレット" class="canvas_select palette_type"><% echo(palette_select_tags) %></select>
 	<% /def %>
-<!-- NEOを使う -->
+
+	<!-- NEOを使う -->
 <!-- <label class="checkbox use_neo"><input type="checkbox" name="useneo" checked="checked" />NEOを使う</label> -->
 
-<% def(anime) %><label class="checkbox use_animation"><input type="checkbox" value="true" name="anime" <% echo (animechk) %>>動画記録</span></label>
+<% def(anime) %><label class="checkbox use_animation"><input type="checkbox" value="true" name="anime" <% echo (animechk) %>>動画記録</label>
 	<% /def %>
 	<% def(n) %>
 	<!--
@@ -252,14 +250,14 @@ PMAX_H //高さ
 	</td></tr>
 	 <tr>
 	  <td colspan="2" class="td_noborder">
-	<% ========== ファイルアップロード時の説明 ========== %>
-	<% def(upfile) %>
-	<div class="howtowrite">
-		<ul id="up_desc">
-			<li>画像は横 <% echo (maxw) %>ピクセル、縦 <% echo (maxh) %>ピクセルを超えると縮小表示されます。</li>
-		<li>最大投稿データ量は <% echo (maxkb) %> KB までです。
-			<% echo (addinfo) %>
-		</ul>
+<% ========== ファイルアップロード時の説明 ========== %>
+<% def(upfile) %>
+<div class="howtowrite">
+	<ul id="up_desc">
+		<li>画像は横 <% echo (maxw) %>ピクセル、縦 <% echo (maxh) %>ピクセルを超えると縮小表示されます。</li>
+	<li>最大投稿データ量は <% echo (maxkb) %> KB までです。
+		<% echo (addinfo) %>
+	</ul>
 	</div>
 	<% /def %>
 	</td></tr>
@@ -442,7 +440,7 @@ PMAX_H //高さ
 <div class="res_button_wrap">
 	<% def(sharebutton) %>
 	<span class="share_button">
-		<a target="_blank" href="https://twitter.com/intent/tweet?text=%5B<% echo(oya/no|urlencode) %>%5D <% echo(oya/sub|urlencode) %> by <% echo(oya/name|urlencode) %> - <% echo(title|urlencode) %>&url=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-twitter"></span>tweet</a>
+		<a target="_blank" href="https://twitter.com/intent/tweet?text=%5B<% echo(oya/no|urlencode) %>%5D%20<% echo(oya/sub|urlencode) %>%20by%20<% echo(oya/name|urlencode) %>%20-%20<% echo(title|urlencode) %>&url=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-twitter"></span>tweet</a>
 		<a target="_blank" class="fb btn" href="http://www.facebook.com/share.php?u=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-facebook2"></span>share</a>
 	</span>
 	<% /def %>

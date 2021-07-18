@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 	<head>
-		<meta charset="<% echo(charset) %>">
+		<meta charset="utf-8">
 		<% def(paint_mode) %>
 		<% def(pinchin) %>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -58,9 +58,6 @@
 
 		</script>
 		<% /def %>
-		<head>
-			<meta charset="utf-8">
-			<meta name="viewport" content="width=device-width,initial-scale=1">
 			<link rel="stylesheet" href="<% echo(skindir) %>css/mono_main.css">
 			<link rel="stylesheet" href="<% echo(skindir) %>css/mono_dark.css" id="css1" disabled>
 			<link rel="stylesheet" href="<% echo(skindir) %>css/mono_deep.css" id="css2" disabled>
@@ -101,6 +98,7 @@
 		</script>
 		
 		<title><% echo(title) %></title>
+		<style id="for_mobile"></style>
 	</head>
 	<body id="paintmode">
 		
@@ -155,7 +153,9 @@
 		
 				allowDownload: true,
 				resourcesRoot: "chickenpaint/",
-				disableBootstrapAPI: true
+				disableBootstrapAPI: true,
+				fullScreenMode: "auto"
+
 			});
 		})
 		</script>
@@ -551,6 +551,16 @@
 			<% /def %>
 			<% def(continue_mode) %>
 			<!-- (========== CONTINUE MODE(コンティニューモード) start ==========) -->
+			<script>
+				function is_mobile() {
+				if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 769px)').matches))  return true;
+				return false;
+				}
+				if(is_mobile()){
+					document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
+				}
+				</script>
+
 			<script type="text/javascript" src="loadcookie.js"></script>
 			<section>
 				<div class="thread">
@@ -577,9 +587,9 @@
 						</select>
 						<% def(select_app)%>
 
-						<select name="shi" class="for_pc">
+						<select name="shi">
 							<option value="neo">PaintBBS NEO</option>
-							<% def(use_shi_painter) %><option value="1">しぃペインター</option><% /def %>
+							<% def(use_shi_painter) %><option value="1" class="for_pc">しぃペインター</option><% /def %>
 							<% def(use_chickenpaint) %><option value="chicken">ChickenPaint</option><% /def %>
 						</select>
 						<% /def %>
@@ -593,21 +603,8 @@
 
 						<% def(passflag) %>Pass<input class="form" type="password" name="pwd" size="8" value=""> <% /def %>
 						<input class="button" type="submit" value="続きを描く">
-						<input type="hidden" name="is_mobile" id="is_mobile" value>
 
 					</form>
-					<style id="for_mobile"></style>
-
-					<script>
-						function is_mobile() {
-						if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 533px)').matches))  return true;
-						return false;
-						}
-						if(is_mobile()){
-							document.getElementById("is_mobile").value = "true";
-							document.getElementById("for_mobile").textContent=".for_pc{display: none;}";
-						}
-						</script>
 						
 					<ul>
 						<% def(newpost_nopassword) %>
@@ -635,7 +632,7 @@
 					<p>
 						OriginalScript -
 						<a href="http://www.punyu.net/" target="_blank" rel="nofollow noopener noreferrer" title="POTI-board (by PunyuNet)">POTI-board</a>
-						<a href="http://www.2chan.net/" target="_blank" rel="nofollow noopener noreferrer" title="futaba.php v0.8 lot.031015 (by futaba)">futaba.php</a>
+						<span title="futaba.php v0.8 lot.031015 (by futaba)">futaba.php</span>
 						(<a href="http://php.loglog.jp/" target="_blank" rel="nofollow noopener noreferrer" title="gazou.php v3.0 (by Let's PHP!)">gazou.php</a>custom )
 					</p>
 					<% def(paint) %>

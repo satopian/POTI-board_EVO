@@ -99,7 +99,7 @@
 // oya/thumb…サムネイルがあるとき true が入る
 -->
 <% /def %>
-<% def(oya/src) %><div class="posted_image" <% if(oya/w,>=,750) %>style="margin-right:0;float:none;"<% /if %>><% def(oya/thumb) %><a href="<% echo (oya/src) %>" target="_blank" rel="noopener"><% /def %><img src="<% echo (oya/imgsrc) %>" width="<% echo (oya/w) %>" height="<% echo (oya/h) %>" alt="<% echo (oya/sub) %> by <% echo (oya/name) %> (<% echo (oya/size) %> B)" title="<% echo (oya/sub) %> by <% echo (oya/name) %> (<% echo (oya/size) %> B) <% def(oya/thumb) %>サムネイル縮小表示<% /def %>"><% def(oya/thumb) %></a><% /def %>
+<% def(oya/src) %><div class="posted_image" <% if(oya/w,>=,750) %>style="margin-right:0;float:none;"<% /if %>><% def(oya/thumb) %><a href="<% echo (oya/src) %>" target="_blank" rel="noopener"><% /def %><img src="<% echo (oya/imgsrc) %>" width="<% echo (oya/w) %>" height="<% echo (oya/h) %>" alt="<% echo (oya/sub) %> by <% echo (oya/name) %> (<% echo (oya/size) %> B)" title="<% echo (oya/sub) %> by <% echo (oya/name) %> (<% echo (oya/size) %> B) <% def(oya/thumb) %>サムネイル縮小表示<% /def %>" loading="lazy"><% def(oya/thumb) %></a><% /def %>
 </div>
   <% /def %><div class="comment"> <% echo (oya/com) %></div>
   <% def(n) %>
@@ -164,7 +164,7 @@
 -->
 <% /def %>
 
-<% def(oya/res/src) %><div class="posted_image"><% def(oya/res/thumb) %><a href="<% echo (oya/res/src) %>" target="_blank" rel="noopener"><% /def %><img src="<% echo (oya/res/imgsrc) %>" width="<% echo (oya/res/w) %>" height="<% echo (oya/res/h) %>" alt="<% echo (oya/res/sub) %>  by <% echo (oya/res/name) %> (<% echo (oya/res/size) %> B)" title="<% echo (oya/res/sub) %>  by <% echo (oya/res/name) %> (<% echo (oya/res/size) %> B) <% def(oya/res/thumb) %>サムネイル縮小表示<% /def %>"><% def(oya/res/thumb) %></a><% /def %>
+<% def(oya/res/src) %><div class="posted_image"><% def(oya/res/thumb) %><a href="<% echo (oya/res/src) %>" target="_blank" rel="noopener"><% /def %><img src="<% echo (oya/res/imgsrc) %>" width="<% echo (oya/res/w) %>" height="<% echo (oya/res/h) %>" alt="<% echo (oya/res/sub) %>  by <% echo (oya/res/name) %> (<% echo (oya/res/size) %> B)" title="<% echo (oya/res/sub) %>  by <% echo (oya/res/name) %> (<% echo (oya/res/size) %> B) <% def(oya/res/thumb) %>サムネイル縮小表示<% /def %>" loading="lazy"><% def(oya/res/thumb) %></a><% /def %>
 </div><% /def %>
 <div class="comment"> <% echo (oya/res/com) %></div>
 <% def(n) %>

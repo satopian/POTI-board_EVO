@@ -6,7 +6,7 @@
 - [thenickdude/chickenpaint: An HTML5 Port of the ChibiPaint multi-layer Oekaki painting tool](https://github.com/thenickdude/chickenpaint)  
 - 従来のPaintBBS NEO、しぃペインターに加え、ChickenPaintも使えるようにしたPOTI-boardです。  
 
-DEMO [お絵かき掲示板](https://pbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
+DEMO [お絵かき掲示板](https://paintbbs.sakura.ne.jp/cgi/neosample/chibi/index.html)
 ### [2021/06/17] v3.02.0 lot.210617
 - ChickenPaintの画面が選択される問題に対応。
 - PaintBBS NEOとしぃペインターの時は、Windows inkや二本指によるジェスチャーでブラウザバックしないようにした。

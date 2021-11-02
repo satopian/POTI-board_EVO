@@ -97,7 +97,7 @@ function checkBrowserSupport() {
 }
 
 function isSmallScreen() {
-  return (0, _jquery.default)(window).width() < 400 || (0, _jquery.default)(window).height() < 768;
+  return (0, _jquery.default)(window).width() < 430 || (0, _jquery.default)(window).height() < 430;
 }
 
 function createDrawingTools() {
@@ -1328,8 +1328,22 @@ function ChickenPaint(options) {
       isFullScreen = newVal;
       (0, _jquery.default)("body").toggleClass("chickenpaint-full-screen", isFullScreen);
       (0, _jquery.default)(uiElem).toggleClass("chickenpaint-full-screen", isFullScreen);
-      that.emitEvent("fullScreen", [isFullScreen]);
+
+      if (isFullScreen && (0, _jquery.default)("head meta[name=viewport]").length === 0) {
+        // Reset page zoom to zero if the host page didn't already set a viewport
+        (0, _jquery.default)("head").append('<meta name="viewport" content="width=device-width,user-scalable=no">'); // Give the browser time to adjust the viewport before we adapt to the new size
+
+        setTimeout(function () {
+          return that.emitEvent("fullScreen", [isFullScreen]);
+        }, 200);
+      } else {
+        that.emitEvent("fullScreen", [isFullScreen]);
+      }
     }
+  };
+
+  this.isFullScreen = function () {
+    return isFullScreen;
   };
 
   function installUnsavedWarning() {
@@ -1354,8 +1368,13 @@ function ChickenPaint(options) {
   function startMainGUI(swatches, initialRotation90) {
     if (!uiElem) {
       return;
-    }
+    } // Prevent double-click iOS page zoom events
 
+
+    uiElem.addEventListener("dblclick", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
     that.artwork.on("editModeChanged", onEditModeChanged);
     mainGUI = new _CPMainGUI.default(that, uiElem);
     that.emitEvent("fullScreen", [isFullScreen]);
@@ -20010,7 +20029,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     along with ChickenPaint. If not, see <http://www.gnu.org/licenses/>.
 */
 function CPAboutDialog(parent) {
-  var dialog = (0, _jquery.default)("<div class=\"modal fade chickenpaint-about-dialog\" tabindex=\"-1\" role=\"dialog\">\n                <div class=\"modal-dialog\">\n                    <div class=\"modal-content\">\n                        <div class=\"modal-header\">\n                            <h5 class=\"modal-title\">About ChickenPaint v2</h5>\n                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                                <span aria-hidden=\"true\">&times;</span>\n                            </button>\n                        </div>\n                        <div class=\"modal-body\">\n                            <a class=\"chickenpaint-on-github\" target=\"_blank\" href=\"https://github.com/thenickdude/chickenpaint\"><span class=\"fab fa-github\"></span> ChickenPaint on GitHub</a>\n                            \n                            <p>\n                                ChickenPaint is a translation of <a href=\"https://github.com/thenickdude/chibipaint\" target=\"_blank\">ChibiPaint</a>\n                                from Java to JavaScript by Nicholas Sherlock / Chicken Smoothie\n                            </p>\n                            <p>\n                                ChibiPaint is Copyright (c) 2006-2008 Marc Schefer. All Rights Reserved\n                            </p>\n                            <p>\n                                ChickenPaint is free software: you can redistribute it and/or modify\n                                it under the terms of the GNU General Public License as published by\n                                the Free Software Foundation, either version 3 of the License, or\n                                (at your option) any later version.\n                            </p>\n        \n                            <p>\n                                ChickenPaint is distributed in the hope that it will be useful,\n                                but WITHOUT ANY WARRANTY; without even the implied warranty of\n                                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n                                <a target=\"_blank\" href=\"https://www.gnu.org/licenses/\">GNU General Public License</a> for more details.\n                            </p>\n        \n                            <pre class=\"pre-scrollable chickenpaint-third-party-licenses\">Includes icons from the <a href=\"https://tango.freedesktop.org/\" target=\"_blank\">Tango Desktop Project</a>\n\nIncludes icons from the <a target=\"_blank\" href=\"https://extensions.libreoffice.org/en/extensions/show/tango-icon-theme-for-libreoffice\">Tango Icon Theme for LibreOffice</a>:\n    All artwork is licensed under the Creative Commons Attribution-Share Alike 3.0\n    United States License. To view a copy of this licence, visit\n    https://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative\n    Commons, 171 Second Street, Suite 300, San Francisco, California 94105, USA.\n    \n    Credit for icons imported from git://git.gnome.org/gnome-icon-theme or derivatives\n    of these goes to the GNOME project (https://www.gnome.org)\n    Derivatives and new icons were created by Alexander Wilms &lt;f.alexander.wilms@gmail.com> \n    and Miroslav Mazel &lt;mazelm@gmail.com>\n\nIncludes these MIT-licensed libraries:\n\n    Includes the <a target=\"_blank\" href=\"https://github.com/eligrey/FileSaver.js\">FileSaver.js library</a>\n    FileSaver.js Copyright \xA9 2015 <a target=\"_blank\" href=\"https://eligrey.com/\">Eli Grey</a>\n\n    Includes the <a target=\"_blank\" href=\"https://github.com/nodeca/pako\">Pako zlib compression library</a>\n    Copyright (C) 2014-2015 by Vitaly Puzrin\n    \n    Includes the <a target=\"_blank\" href=\"https://github.com/madrobby/keymaster\">keymaster.js</a> keyboard library\n    Copyright (c) 2011-2013 Thomas Fuchs\n\n    Includes the <a target=\"_blank\" href=\"https://github.com/stefanpenner/es6-promise\">es6-promise</a> library\n    Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors\n\n    Includes the <a target=\"_blank\" href=\"https://benalman.com/projects/jquery-throttle-debounce-plugin/\">jQuery throttle-debounce</a> library\n    Copyright (c) 2010 \"Cowboy\" Ben Alman\n\n    Permission is hereby granted, free of charge, to any person\n    obtaining a copy of this software and associated documentation\n    files (the \"Software\"), to deal in the Software without\n    restriction, including without limitation the rights to use,\n    copy, modify, merge, publish, distribute, sublicense, and/or\n    sell copies of the Software, and to permit persons to whom the\n    Software is furnished to do so, subject to the following\n    conditions:\n\n    The above copyright notice and this permission notice shall be\n    included in all copies or substantial portions of the Software.\n\n    THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT \n    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\n    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\n    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\n    OTHER DEALINGS IN THE SOFTWARE.\n\nIncludes the <a href=\"https://www.jquery.com/\" target=\"_blank\">jQuery library</a> \nCopyright <a href=\"https://jquery.org/\" target=\"_blank\">jQuery Foundation and other contributors</a>\n    \n    This software consists of voluntary contributions made by many\n    individuals. For exact contribution history, see the revision \n    history available at https://github.com/jquery/jquery\n    \n    The following license applies to all parts of this software \n    except as documented below:\n    \n    Permission is hereby granted, free of charge, to any person \n    obtaining a copy of this software and associated documentation\n    files (the \"Software\"), to deal in the Software without\n    restriction, including without limitation the rights to use, \n    copy, modify, merge, publish, distribute, sublicense, and/or\n    sell copies of the Software, and to permit persons to whom the\n    Software is furnished to do so, subject to the following\n    conditions:\n    \n    The above copyright notice and this permission notice shall be\n    included in all copies or substantial portions of the Software.\n    \n    THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT\n    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\n    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\n    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\n    OTHER DEALINGS IN THE SOFTWARE.\n\nIncludes the <a href=\"https://github.com/jquery/PEP/\" target=\"_blank\">jQuery PEP library</a>\nCopyright jQuery Foundation and other contributors, https://jquery.org/\n    \n    This software consists of voluntary contributions made by many\n    individuals. For exact contribution history, see the revision \n    history available at https://github.com/jquery/PEP\n    \n    The following license applies to all parts of this software \n    except as documented below:\n    \n    Permission is hereby granted, free of charge, to any person \n    obtaining a copy of this software and associated documentation \n    files (the \"Software\"), to deal in the Software without \n    restriction, including without limitation the rights to use, \n    copy, modify, merge, publish, distribute, sublicense, and/or \n    sell copies of the Software, and to permit persons to whom the\n    Software is furnished to do so, subject to the following \n    conditions:\n\n    The above copyright notice and this permission notice shall be\n    included in all copies or substantial portions of the Software.\n    \n    THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND \n    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT \n    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, \n    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING \n    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR \n    OTHER DEALINGS IN THE SOFTWARE.\n\nIncludes Font Awesome by Dave Gandy - <a href=\"https://fontawesome.io\" target=\"_blank\">https://fontawesome.io</a>\n                    </pre>\n                </div>\n            </div>\n        </div>\n    "); // Destroy the modal upon close
+  var dialog = (0, _jquery.default)("<div class=\"modal fade chickenpaint-about-dialog\" tabindex=\"-1\" role=\"dialog\">\n                <div class=\"modal-dialog\">\n                    <div class=\"modal-content\">\n                        <div class=\"modal-header\">\n                            <h5 class=\"modal-title\">About ChickenPaint v2</h5>\n                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                                <span aria-hidden=\"true\">&times;</span>\n                            </button>\n                        </div>\n                        <div class=\"modal-body\">\n                            <a class=\"chickenpaint-on-github\" target=\"_blank\" href=\"https://github.com/thenickdude/chickenpaint\"><span class=\"fab fa-github\"></span> ChickenPaint on GitHub</a>\n                            \n                            <p>\n                                ChickenPaint is a translation of <a href=\"https://github.com/thenickdude/chibipaint\" target=\"_blank\">ChibiPaint</a>\n                                from Java to JavaScript by Nicholas Sherlock / Chicken Smoothie\n                            </p>\n                            <p>\n                                ChibiPaint is Copyright (c) 2006-2008 Marc Schefer. All Rights Reserved\n                            </p>\n                            <p>\n                                ChickenPaint is free software: you can redistribute it and/or modify\n                                it under the terms of the GNU General Public License as published by\n                                the Free Software Foundation, either version 3 of the License, or\n                                (at your option) any later version.\n                            </p>\n        \n                            <p>\n                                ChickenPaint is distributed in the hope that it will be useful,\n                                but WITHOUT ANY WARRANTY; without even the implied warranty of\n                                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n                                <a target=\"_blank\" href=\"https://www.gnu.org/licenses/\">GNU General Public License</a> for more details.\n                            </p>\n        \n                            <pre class=\"pre-scrollable chickenpaint-third-party-licenses\">UI and Logo Design by <a target=\"_blank\" href=\"https://github.com/Anteira\">Miglena Lapavicheva (Anteira)</a>\n    These icons are dual-licensed under <a target=\"_blank\" href=\"https://spdx.org/licenses/GPL-3.0-or-later.html\">GPL-3.0-or-later</a> and <a target=\"_blank\" href=\"https://creativecommons.org/licenses/by/3.0/\">CC-BY-3.0</a>\n    \nIncludes these MIT-licensed libraries:\n\n    Includes the <a target=\"_blank\" href=\"https://github.com/eligrey/FileSaver.js\">FileSaver.js library</a>\n    FileSaver.js Copyright \xA9 2015 <a target=\"_blank\" href=\"https://eligrey.com/\">Eli Grey</a>\n\n    Includes the <a target=\"_blank\" href=\"https://github.com/nodeca/pako\">Pako zlib compression library</a>\n    Copyright (C) 2014-2015 by Vitaly Puzrin\n    \n    Includes the <a target=\"_blank\" href=\"https://github.com/madrobby/keymaster\">keymaster.js</a> keyboard library\n    Copyright (c) 2011-2013 Thomas Fuchs\n\n    Includes the <a target=\"_blank\" href=\"https://github.com/stefanpenner/es6-promise\">es6-promise</a> library\n    Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors\n\n    Includes the <a target=\"_blank\" href=\"https://benalman.com/projects/jquery-throttle-debounce-plugin/\">jQuery throttle-debounce</a> library\n    Copyright (c) 2010 \"Cowboy\" Ben Alman\n\n    Permission is hereby granted, free of charge, to any person\n    obtaining a copy of this software and associated documentation\n    files (the \"Software\"), to deal in the Software without\n    restriction, including without limitation the rights to use,\n    copy, modify, merge, publish, distribute, sublicense, and/or\n    sell copies of the Software, and to permit persons to whom the\n    Software is furnished to do so, subject to the following\n    conditions:\n\n    The above copyright notice and this permission notice shall be\n    included in all copies or substantial portions of the Software.\n\n    THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT \n    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\n    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\n    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\n    OTHER DEALINGS IN THE SOFTWARE.\n\nIncludes the <a href=\"https://www.jquery.com/\" target=\"_blank\">jQuery library</a> \nCopyright <a href=\"https://jquery.org/\" target=\"_blank\">jQuery Foundation and other contributors</a>\n    \n    This software consists of voluntary contributions made by many\n    individuals. For exact contribution history, see the revision \n    history available at https://github.com/jquery/jquery\n    \n    The following license applies to all parts of this software \n    except as documented below:\n    \n    Permission is hereby granted, free of charge, to any person \n    obtaining a copy of this software and associated documentation\n    files (the \"Software\"), to deal in the Software without\n    restriction, including without limitation the rights to use, \n    copy, modify, merge, publish, distribute, sublicense, and/or\n    sell copies of the Software, and to permit persons to whom the\n    Software is furnished to do so, subject to the following\n    conditions:\n    \n    The above copyright notice and this permission notice shall be\n    included in all copies or substantial portions of the Software.\n    \n    THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT\n    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\n    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\n    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\n    OTHER DEALINGS IN THE SOFTWARE.\n\nIncludes the <a href=\"https://github.com/jquery/PEP/\" target=\"_blank\">jQuery PEP library</a>\nCopyright jQuery Foundation and other contributors, https://jquery.org/\n    \n    This software consists of voluntary contributions made by many\n    individuals. For exact contribution history, see the revision \n    history available at https://github.com/jquery/PEP\n    \n    The following license applies to all parts of this software \n    except as documented below:\n    \n    Permission is hereby granted, free of charge, to any person \n    obtaining a copy of this software and associated documentation \n    files (the \"Software\"), to deal in the Software without \n    restriction, including without limitation the rights to use, \n    copy, modify, merge, publish, distribute, sublicense, and/or \n    sell copies of the Software, and to permit persons to whom the\n    Software is furnished to do so, subject to the following \n    conditions:\n\n    The above copyright notice and this permission notice shall be\n    included in all copies or substantial portions of the Software.\n    \n    THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND \n    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT \n    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, \n    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING \n    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR \n    OTHER DEALINGS IN THE SOFTWARE.\n\nIncludes Font Awesome by Dave Gandy - <a href=\"https://fontawesome.io\" target=\"_blank\">https://fontawesome.io</a>\n                    </pre>\n                </div>\n            </div>\n        </div>\n    "); // Destroy the modal upon close
 
   dialog.on("hidden.bs.modal", function (e) {
     dialog.remove();
@@ -20854,6 +20873,8 @@ function CPCanvas(controller) {
   /* Track each button independently */
   ,
       wacomPenDown = false,
+      sawPen = false,
+      sawTouchWithPressure = false,
 
   /* The area of the document that should have its layers fused and repainted to the screen
    * (i.e. an area modified by drawing tools). 
@@ -20966,17 +20987,17 @@ function CPCanvas(controller) {
     if (e.keyCode == 32
     /* Space */
     ) {
-        if (e.altKey) {
-          modeStack.push(rotateCanvasMode, true);
-          modeStack.peek().keyDown(e);
-        } else {
-          // We can start the pan mode before the mouse button is even pressed, so that the "grabbable" cursor appears
-          modeStack.push(panMode, true);
-          modeStack.peek().keyDown(e);
-        }
-
-        return true;
+      if (e.altKey) {
+        modeStack.push(rotateCanvasMode, true);
+        modeStack.peek().keyDown(e);
+      } else {
+        // We can start the pan mode before the mouse button is even pressed, so that the "grabbable" cursor appears
+        modeStack.push(panMode, true);
+        modeStack.peek().keyDown(e);
       }
+
+      return true;
+    }
   };
   /**
       * A base for the three drawing modes, so they can all share the same brush-preview-circle drawing behaviour.
@@ -21438,24 +21459,24 @@ function CPCanvas(controller) {
       if (e.keyCode == 32
       /* Space */
       ) {
-          // If we're not already panning, then advertise that a left-click would pan
-          if (!this.capture) {
-            setCursor(CURSOR_PANNABLE);
-          }
-
-          return true;
+        // If we're not already panning, then advertise that a left-click would pan
+        if (!this.capture) {
+          setCursor(CURSOR_PANNABLE);
         }
+
+        return true;
+      }
     };
 
     this.keyUp = function (e) {
       if (this.transient && panningButton != BUTTON_WHEEL && e.keyCode == 32
       /* Space */
       ) {
-          setCursor(CURSOR_DEFAULT);
-          modeStack.pop(); // yield control to the default mode
+        setCursor(CURSOR_DEFAULT);
+        modeStack.pop(); // yield control to the default mode
 
-          return true;
-        }
+        return true;
+      }
     };
 
     this.mouseDown = function (e, button, pressure) {
@@ -22075,18 +22096,18 @@ function CPCanvas(controller) {
       if (e.keyCode == 13
       /* Enter */
       ) {
-          controller.actionPerformed({
-            action: "CPTransformAccept"
-          });
-          return true;
-        } else if (e.keyCode == 27
+        controller.actionPerformed({
+          action: "CPTransformAccept"
+        });
+        return true;
+      } else if (e.keyCode == 27
       /* Escape */
       ) {
-          controller.actionPerformed({
-            action: "CPTransformReject"
-          });
-          return true;
-        }
+        controller.actionPerformed({
+          action: "CPTransformReject"
+        });
+        return true;
+      }
     };
 
     this.enter = function () {
@@ -22218,11 +22239,11 @@ function CPCanvas(controller) {
       if (this.transient && rotateButton != BUTTON_WHEEL && e.keyCode == 32
       /* Space */
       ) {
-          setCursor(CURSOR_DEFAULT);
-          modeStack.pop(); // yield control to the default mode
+        setCursor(CURSOR_DEFAULT);
+        modeStack.pop(); // yield control to the default mode
 
-          return true;
-        }
+        return true;
+      }
     };
 
     this.keyDown = function (e) {
@@ -22585,7 +22606,11 @@ function CPCanvas(controller) {
     that.emitEvent("canvasRotated90", [0]);
   };
   /**
-   * Add the pointer pressure field to the given pointer event.
+   * Get the current pen pressure, given a pointer event.
+   * 
+   * @param {PointerEvent} e
+   * 
+   * @return {Number}
    */
 
 
@@ -22593,12 +22618,35 @@ function CPCanvas(controller) {
     // Use Wacom pressure in preference to pointer event pressure (if present)
     if (wacomPenDown) {
       return tablet.getPressure();
-    } else {
-      /* In the Pointer Events API, mice have a default pressure of 0.5, but we want 1.0. Since we can't 
-       * distinguish between mice and pens at this point, we don't have any better options:
-       */
-      return e.pressure * 2;
+    } // Safari fails to set pressure = 0.5 for mouse button down like it is supposed to
+
+
+    if (e.pointerType === "mouse" && e.buttons !== 0 && e.pressure === 0) {
+      return 1;
     }
+
+    if (e.pointerType === "touch") {
+      /* Some devices like iOS set pressure = 0 for all touch events, so detect that absence of pressure
+       * and override to use a pressure of 1.0.
+       * 
+       * Android provides useful pressure based on the finger's contact area with the screen (Pixel 4A).
+       */
+      if (e.pressure !== 0) {
+        sawTouchWithPressure = true;
+      }
+
+      if (sawTouchWithPressure) {
+        return e.pressure * 2;
+      }
+
+      return 1.0;
+    }
+    /* In the Pointer Events API, mice have a default pressure of 0.5, but we want 1.0. Since we can't 
+     * reliably distinguish between mice and pens, we don't have any better options:
+     */
+
+
+    return e.pressure * 2;
   }
 
   var mouseWheelDebounce = false;
@@ -22642,21 +22690,26 @@ function CPCanvas(controller) {
     if (!canvasClientRect) {
       canvasClientRect = canvas.getBoundingClientRect();
     }
+
+    if (sawPen && e.pointerType === "touch") {
+      // Palm rejection for devices that support pens
+      return;
+    }
     /* Store these globally for the event handlers to refer to (we'd write to the event itself but some browsers
      * don't enjoy that)
      */
 
 
     mouseX = e.clientX - canvasClientRect.left;
-    mouseY = e.clientY - canvasClientRect.top; // Flags used by e.buttons
-
-    var FLAG_PRIMARY = 1,
+    mouseY = e.clientY - canvasClientRect.top;
+    var // Flags used by e.buttons:
+    FLAG_PRIMARY = 1,
         FLAG_SECONDARY = 2,
-        FLAG_WHEEL = 4;
-    var isDragging = e.buttons != 0,
-        pressure = getPointerPressure(e); // Did any of our buttons change state?
+        FLAG_WHEEL = 4,
+        isDragging = e.buttons !== 0,
+        pressure = isDragging ? getPointerPressure(e) : 0; // Did any of our buttons change state?
 
-    if ((e.buttons & FLAG_PRIMARY) != 0 != mouseDown[BUTTON_PRIMARY]) {
+    if ((e.buttons & FLAG_PRIMARY) !== 0 != mouseDown[BUTTON_PRIMARY]) {
       if (e.mozPressure === 0.5) {
         /* We received a Mozilla "click" level of pressure (0.5) as a pointer-move
          * before we received the actual mouseDown event (which carries the correct pressure).
@@ -22675,7 +22728,7 @@ function CPCanvas(controller) {
       }
     }
 
-    if ((e.buttons & FLAG_SECONDARY) != 0 != mouseDown[BUTTON_SECONDARY]) {
+    if ((e.buttons & FLAG_SECONDARY) !== 0 != mouseDown[BUTTON_SECONDARY]) {
       mouseDown[BUTTON_SECONDARY] = !mouseDown[BUTTON_SECONDARY];
 
       if (mouseDown[BUTTON_SECONDARY]) {
@@ -22685,7 +22738,7 @@ function CPCanvas(controller) {
       }
     }
 
-    if ((e.buttons & FLAG_WHEEL) != 0 != mouseDown[BUTTON_WHEEL]) {
+    if ((e.buttons & FLAG_WHEEL) !== 0 != mouseDown[BUTTON_WHEEL]) {
       mouseDown[BUTTON_WHEEL] = !mouseDown[BUTTON_WHEEL];
 
       if (mouseDown[BUTTON_WHEEL]) {
@@ -22699,6 +22752,10 @@ function CPCanvas(controller) {
       modeStack.mouseDrag(e, pressure);
     } else {
       modeStack.mouseMove(e, pressure);
+    }
+
+    if (!sawPen && e.pointerType === "pen") {
+      sawPen = true;
     }
   } // Called when all mouse/pointer buttons are released
 
@@ -22714,6 +22771,11 @@ function CPCanvas(controller) {
 
 
   function handlePointerDown(e) {
+    if (sawPen && e.pointerType === "touch") {
+      // Palm rejection for devices that support pens
+      return;
+    }
+
     canvas.setPointerCapture(e.pointerId);
     canvasClientRect = canvas.getBoundingClientRect(); // Store these globally for the event handlers to refer to
 
@@ -25983,6 +26045,12 @@ var MENU_ENTRIES = [{
     title: "Displays some information about ChickenPaint"
   }]
 }];
+/**
+ * 
+ * @param {ChickenPaint} controller
+ * @param {CPMainGui} mainGUI
+ * @constructor
+ */
 
 function CPMainMenu(controller, mainGUI) {
   var bar = (0, _jquery.default)('<nav class="navbar navbar-expand-md navbar-light bg-light">' + '<a class="navbar-brand" href="#">ChickenPaint</a>' + '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chickenpaint-main-menu-content" aria-controls="chickenpaint-main-menu-content" aria-expanded="false" aria-label="Toggle main menu">' + '<span class="navbar-toggler-icon"></span>' + '</button>' + '<div class="collapse navbar-collapse" id="chickenpaint-main-menu-content">' + '<ul class="navbar-nav mr-auto">' + '</ul>' + '</div>' + '<div class="widget-nav" id="chickenpaint-palette-toggler-content"/>' + '</nav>'),
@@ -26168,6 +26236,11 @@ function CPMainMenu(controller, mainGUI) {
   }
 
   mainGUI.getPaletteManager().on("paletteVisChange", onPaletteVisChange);
+  var fullScreenToggle = (0, _jquery.default)(".dropdown-item[data-action=CPFullScreen]", bar);
+  controller.on("fullScreen", function (isFullscreen) {
+    return fullScreenToggle.toggleClass("selected", isFullscreen);
+  });
+  fullScreenToggle.toggleClass("selected", controller.isFullScreen());
 }
 
 module.exports = exports.default;
@@ -26456,7 +26529,7 @@ function CPPalette(cpController, className, title, options) {
   };
 
   function paletteHeaderPointerMove(e) {
-    if (e.buttons != 0) {
+    if ((dragAction === "dragStart" || dragAction === "dragging") && e.buttons !== 0) {
       var newX = e.pageX - dragOffset.x,
           newY = e.pageY - dragOffset.y;
 
@@ -26486,7 +26559,6 @@ function CPPalette(cpController, className, title, options) {
         // Close button was clicked
         that.emitEvent("paletteVisChange", [that, false]);
       } else {
-        headElement.setPointerCapture(e.pointerId);
         dragStartPos = {
           x: parseInt(containerElement.style.left, 10) || 0,
           y: parseInt(containerElement.style.top, 10) || 0
@@ -26502,6 +26574,8 @@ function CPPalette(cpController, className, title, options) {
         } else {
           dragAction = "dragging";
         }
+
+        e.target.setPointerCapture(e.pointerId);
       }
     }
   }
@@ -26525,8 +26599,11 @@ function CPPalette(cpController, className, title, options) {
       dragAction = false;
 
       try {
-        headElement.releasePointerCapture(e.pointerId);
-      } catch (e) {}
+        e.target.releasePointerCapture(e.pointerId);
+      } catch (e) {
+        // This can fail for a variety of reasons we don't care about and won't affect us
+        console.error(e);
+      }
     }
   }
 

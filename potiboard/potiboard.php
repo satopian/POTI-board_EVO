@@ -6,8 +6,8 @@ define('USE_DUMP_FOR_DEBUG','0');
 
 // POTI-board EVO
 // バージョン :
-define('POTI_VER','v3.05.2');
-define('POTI_LOT','lot.210803'); 
+define('POTI_VER','v3.10.5');
+define('POTI_LOT','lot.211031'); 
 
 /*
   (C) 2018-2021 POTI改 POTI-board redevelopment team
@@ -138,9 +138,7 @@ defined('USE_SELECT_PALETTES') or define('USE_SELECT_PALETTES', '0');
 defined('DO_NOT_CHANGE_POSTS_TIME') or define('DO_NOT_CHANGE_POSTS_TIME', '0');
 
 //画像なしのチェックボックスを使用する する:1 しない:0 
-defined('USE_CHECK_NO_FILE') or define('USE_CHECK_NO_FILE', '1');
-//コメント内のHTMLタグをHTMLとして表示する する:1 しない:0
-defined('DISPLAY_HTML_TAGS_IN_THE_COMMENT_AS_HTML') or define('DISPLAY_HTML_TAGS_IN_THE_COMMENT_AS_HTML', '0');
+defined('USE_CHECK_NO_FILE') or define('USE_CHECK_NO_FILE', '0');
 //CSRFトークンを使って不正な投稿を拒絶する する:1 しない:0
 defined('CHECK_CSRF_TOKEN') or define('CHECK_CSRF_TOKEN', '0');
 
@@ -169,7 +167,8 @@ defined('UPLOADED_OBJECT_NAME') or define('UPLOADED_OBJECT_NAME', '画像');
 defined('UPLOAD_SUCCESSFUL') or define('UPLOAD_SUCCESSFUL', 'のアップロードが成功しました');
 defined('THE_SCREEN_CHANGES') or define('THE_SCREEN_CHANGES', '画面を切り替えます');
 defined('MSG044') or define('MSG044', '最大ログ数が設定されていないか、数字以外の文字列が入っています。');
-defined('MSG045') or define('MSG045', 'アニメファイルをアップロードしてください。<br>対応フォーマットはpch、spchです。');
+defined('MSG045') or define('MSG045', 'アップロードペイントに対応していないファイルです。<br>対応フォーマットはpch、spch、chiです。');
+defined('MSG046') or define('MSG046', 'パスワードが短すぎます。最低6文字。');
 
 $ADMIN_PASS=isset($ADMIN_PASS) ? $ADMIN_PASS : false; 
 if(!$ADMIN_PASS){
@@ -305,19 +304,29 @@ function get_uip(){
 	}
 	return getenv("REMOTE_ADDR");
 }
+//session開始
+function session_sta(){
+	if(!isset($_SESSION)){
+		session_set_cookie_params(
+			0,"","",null,true
+		);
+		session_start();
+		header('Expires:');
+		header('Cache-Control:');
+		header('Pragma:');
+	}
+}
+
 //csrfトークンを作成
 function get_csrf_token(){
-	if(!isset($_SESSION)){
-		session_start();
-	}
-	header('Expires:');
-	header('Cache-Control:');
-	header('Pragma:');
-	return hash('sha256', session_id(), false);
+	session_sta();
+	$token = hash('sha256', session_id(), false);
+	$_SESSION['token']=$token;
+	return $token;
 }
 //csrfトークンをチェック	
 function check_csrf_token(){
-	session_start();
+	session_sta();
 	$token=filter_input(INPUT_POST,'token');
 	$session_token=isset($_SESSION['token']) ? $_SESSION['token'] : '';
 	if(!$session_token||$token!==$session_token){
@@ -382,9 +391,7 @@ function form($resno="",$adminin="",$tmp=""){
 	//csrfトークンをセット
 	$dat['token']='';
 	if(CHECK_CSRF_TOKEN){
-		$token=get_csrf_token();
-		$_SESSION['token']=$token;
-		$dat['token']=$token;
+		$dat['token']=get_csrf_token();
 	}
 
 	$quality = filter_input(INPUT_POST, 'quality',FILTER_VALIDATE_INT);
@@ -478,7 +485,7 @@ function updatelog(){
 
 			$res = create_res($line[$j], ['pch' => 1]);
 
-			$res['disp_resform'] = check_elapsed_days($res); // ミニレスフォームの表示有無
+			$res['disp_resform'] = check_elapsed_days($res['time']); // ミニレスフォームの表示有無
 
 			// ミニフォーム用
 			// $resub = USE_RESUB ? 'Re: ' . $res['sub'] : '';
@@ -502,19 +509,13 @@ function updatelog(){
 					list(,,,,,,,,,$rext,,,$rtime,,,) = explode(",", rtrim($line[$j]));
 					$resimg = $path.$rtime.$rext;
 
-					$imgline[] = ($rext && is_file($resimg)) ? 'img' : '0';
+					$imgline[] = ($rext && is_file($resimg)) ? 'img_exists' : 'noimage';
 				}
 				$resimgs = array_count_values($imgline);
-				if(isset($resimgs['img'])){//未定義エラー対策
-				while($resimgs['img'] > DSP_RESIMG){
-					while($imgline[0]='0'){ //画像付きレスが出るまでシフト
-						array_shift($imgline);
-						$s++;
-					}
+				while(isset($resimgs['img_exists']) && ($resimgs['img_exists'] > DSP_RESIMG)){
 					array_shift($imgline); //画像付きレス1つシフト
 					$s++;
 					$resimgs = array_count_values($imgline);
-				}
 				}
 				if($s>1) {$skipres = $s - 1;}//再計算
 			}
@@ -546,8 +547,7 @@ function updatelog(){
 
 			clearstatcache(); //キャッシュをクリア
 			$oya++;
-		}
-
+	}
 		$prev = $page - PAGE_DEF;
 		$next = $page + PAGE_DEF;
 		// 改ページ処理
@@ -561,7 +561,7 @@ function updatelog(){
 			$end_page=$l+(PAGE_DEF*36);//現在のページよりひとつ後ろのページ
 			if($page-(PAGE_DEF*35)<=$l){break;}//現在ページより1つ前のページ
 		}
-	
+
 		for($i = 0; $i < $counttree; $i += PAGE_DEF){
 			$pn = $i ? $i / PAGE_DEF : 0; // page_number
 			if(($i>=$start_page)&&($i<=$end_page)){//ページ数を表示する範囲
@@ -631,7 +631,7 @@ function res($resno = 0){
 
 	$res = create_res($_line, ['pch' => 1]);
 
-	if(!check_elapsed_days($res)){//レスフォームの表示有無
+	if(!check_elapsed_days($res['time'])){//レスフォームの表示有無
 		$dat['form'] = false;//フォームを閉じる
 		$dat['paintform'] = false;
 	}
@@ -746,13 +746,32 @@ function regist(){
 	$host = gethostbyaddr($userip);
 	check_badip($host);
 	//NGワードがあれば拒絶
-	Reject_if_NGword_exists_in_the_post($com,$name,$email,$url,$sub);
+	Reject_if_NGword_exists_in_the_post();
 
 	$pictmp = filter_input(INPUT_POST, 'pictmp',FILTER_VALIDATE_INT);
 	$picfile = newstring(filter_input(INPUT_POST, 'picfile'));
 
+	// パスワード未入力の時はパスワードを生成してクッキーにセット
+	$c_pass=str_replace("\t",'',filter_input(INPUT_POST, 'pwd'));//エスケープ前の値をCookieにセット
+	if($pwd===''){
+		if($pwdc){//Cookieはnullの可能性があるので厳密な型でチェックしない
+			$pwd=newstring($pwdc);
+			$c_pass=$pwdc;//エスケープ前の値
+		}else{
+			srand((double)microtime()*1000000);
+			$pwd = substr(md5(uniqid(rand())),2,15);
+			$pwd = strtr($pwd,"!\"#$%&'()+,/:;<=>?@[\\]^`/{|}~","ABCDEFGHIJKLMNOabcdefghijklmn");
+			$c_pass=$pwd;
+		}
+	}
+
+	if(strlen($pwd) < 6) error(MSG046);
+
 	//画像アップロード
 	$upfile_name = isset($_FILES["upfile"]["name"]) ? basename($_FILES["upfile"]["name"]) : "";
+	if(strlen($upfile_name)>256){
+		error(MSG015);
+	}
 	$upfile = isset($_FILES["upfile"]["tmp_name"]) ? $_FILES["upfile"]["tmp_name"] : "";
 
 	if($upfile_name && isset($_FILES["upfile"]["error"])){//エラーチェック
@@ -792,8 +811,8 @@ function regist(){
 		list($uip,$uhost,,,$ucode,,$starttime,$postedtime,$uresto) = explode("\t", rtrim($userdata)."\t");
 		if(($ucode != $usercode) && ($uip != $userip)){error(MSG007);}
 		//描画時間を$userdataをもとに計算
-		if($starttime && DSP_PAINTTIME){
-			$psec=$postedtime-$starttime;
+		if(DSP_PAINTTIME && $starttime && is_numeric($starttime)){
+			$psec=(int)$postedtime-(int)$starttime;
 			$ptime = TOTAL_PAINTTIME ? $psec : calcPtime($psec);
 		}
 		$uresto=filter_var($uresto,FILTER_VALIDATE_INT);
@@ -823,24 +842,12 @@ function regist(){
 		}
 		chmod($dest,PERMISSION_FOR_DEST);
 	}
-
-
-	// パスワード未入力の時はパスワードを生成してクッキーにセット
-	$c_pass=str_replace("\t",'',filter_input(INPUT_POST, 'pwd'));//エスケープ前の値をCookieにセット
-	if($pwd===''){
-		if($pwdc){//Cookieはnullの可能性があるので厳密な型でチェックしない
-			$pwd=newstring($pwdc);
-			$c_pass=$pwdc;//エスケープ前の値
-		}else{
-			srand((double)microtime()*1000000);
-			$pwd = substr(rand(), 0, 8);
-			$c_pass=$pwd;
-		}
-	}
+	//パスワードハッシュ
 	$pass = $pwd ? password_hash($pwd,PASSWORD_BCRYPT,['cost' => 5]) : "*";
+
 	$date = now_date(time());//日付取得
 	if(DISP_ID){
-		$date .= " ID:" . getId($userip, time());
+		$date .= " ID:" . getId($userip);
 	}
 
 	//カンマをエスケープ
@@ -887,8 +894,8 @@ function regist(){
 		}
 	}
 	if($resto && isset($lineindex[$resto])){
-		list(,,,,,,,,,,,,$res['time'],) = explode(",", $line[$lineindex[$resto]]);
-		if(!check_elapsed_days($res)){//フォームが閉じられていたら
+		list(,,,,,,,,,,,,$_time,) = explode(",", $line[$lineindex[$resto]]);
+		if(!check_elapsed_days($_time)){//フォームが閉じられていたら
 			if($pictmp==2){//お絵かきは
 				$resto = '';//新規投稿
 			}else{
@@ -960,6 +967,7 @@ function regist(){
 	$ext=$w=$h=$chk="";
 	$thumbnail='';
 	$pchext='';
+	$src='';
 	// アップロード処理
 	if($dest&&$is_file_dest){//画像が無い時は処理しない
 	//画像フォーマット
@@ -1012,7 +1020,6 @@ function regist(){
 			$dst = PCH_DIR.$time.'.chi';
 			if(copy($src, $dst)){
 				chmod($dst,PERMISSION_FOR_DEST);
-				unlink($src);
 			}
 		}
 
@@ -1022,7 +1029,6 @@ function regist(){
 			$dst = PCH_DIR.$time.$pchext;
 			if(copy($src, $dst)){
 				chmod($dst,PERMISSION_FOR_DEST);
-				unlink($src);
 			}
 		}
 		list($w, $h) = getimagesize($dest);
@@ -1033,15 +1039,9 @@ function regist(){
 		// 縮小表示
 		$max_w = $resto ? MAX_RESW : MAX_W;
 		$max_h = $resto ? MAX_RESH : MAX_H;
-		$reduced_size=image_reduction_display($w,$h,$max_w,$max_h);
-			$w=$reduced_size['w'];
-			$h=$reduced_size['h'];
+		list($w,$h)=image_reduction_display($w,$h,$max_w,$max_h);
 
 		if(USE_THUMB){thumb($path,$time,$ext,$max_w,$max_h);}
-
-		//ワークファイル削除
-		safe_unlink($upfile);
-		safe_unlink($temppath.$picfile.".dat");
 
 	}
 	// 最大ログ数を超過した行と画像を削除
@@ -1113,6 +1113,11 @@ function regist(){
 	closeFile($tp);
 	closeFile($fp);
 
+	//ワークファイル削除
+	safe_unlink($src);
+	safe_unlink($upfile);
+	safe_unlink($temppath.$picfile.".dat");
+	
 	//-- クッキー保存 --
 	//パスワード
 	$email = $email ? $email : ($sage ? 'sage' : '') ;
@@ -1142,7 +1147,9 @@ function regist(){
 	if(is_file(NOTICEMAIL_FILE)	//メール通知クラスがある場合
 	&& !(NOTICE_NOADMIN && $pwd && ($pwd === $ADMIN_PASS))){//管理者の投稿の場合メール出さない
 		require(__DIR__.'/'.NOTICEMAIL_FILE);
-
+		$name = h_decode($name);
+		$sub = h_decode($sub);
+		$com = h_decode($com); 
 		$data['to'] = TO_MAIL;
 		$data['name'] = $name;
 		$data['email'] = $email;
@@ -1170,6 +1177,11 @@ function regist(){
 		1,
 		$message . THE_SCREEN_CHANGES
 	);
+}
+
+function h_decode($str){
+	$str = str_replace("&#44;", ",", $str);
+	return htmlspecialchars_decode($str, ENT_QUOTES);
 }
 
 //ツリー削除
@@ -1279,90 +1291,97 @@ function admindel($pass){
 	$onlyimgdel = filter_input(INPUT_POST, 'onlyimgdel',FILTER_VALIDATE_BOOLEAN);
 	$del = filter_input(INPUT_POST,'del',FILTER_VALIDATE_INT,FILTER_REQUIRE_ARRAY);//$del は配列
 	$del_pageno=(int)filter_input(INPUT_POST,'del_pageno',FILTER_VALIDATE_INT);
-
 	// 削除画面
 	$dat['admin_del'] = true;
 	$dat['pass'] = $pass;
-
 	$all = 0;
 	$line = file(LOGFILE);
 	$countlog=count($line);
 	$l = 0;
 
-	for($k = 0; $k < $countlog  ; $k += 2000){
+	for($k = 0; $k < $countlog  ; $k += 1000){
 
-		$dat['del_page'][$l]['no']=$k;
-		$dat['del_page'][$l]['pageno']=$l;
-		if($del_pageno===$l*2000){
-			$dat['del_page'][$l]['notlink']=true;
+			$dat['del_page'][$l]['no']=$k;
+			$dat['del_page'][$l]['pageno']=$l;
+			if($del_pageno===$l*1000){
+				$dat['del_page'][$l]['notlink']=true;
 			}
 		++$l;
 	}
-		foreach($line as $j => $value){
-			if(($j>=(0+$del_pageno))&&($j<(2000+$del_pageno))){
 
+	foreach($line as $j => $value){
+		if(($j>=($del_pageno))&&($j<(1000+$del_pageno))){
 			list($no,$date,$name,$email,$sub,$com,$url,
-				$host,$pw,$ext,$w,$h,$time,$chk,) = explode(",",$value);
-			$now  = preg_replace("/( ID:.*)/","",$date);//ID以降除去
-			$name = h(strip_tags($name));//タグ除去
-			$sub = h(strip_tags($sub));
-			if(strlen($name) > 10) $name = mb_strcut($name,0,9).".";
-			if(strlen($sub) > 10) $sub = mb_strcut($sub,0,9).".";
-			$email=filter_var($email, FILTER_VALIDATE_EMAIL);
-			if($email){
-				$name='<a href="mailto:'.$email.'">'.$name.'</a>';
-			}
-			$com = preg_replace("#<br( *)/?>#i"," ",$com);
-			$com = h(strip_tags($com));
-			if(strlen($com) > 20) $com = mb_strcut($com,0,18) . ".";
-			$clip = "";
-			$size = 0;
-			$chk= "";
-			if($ext && is_file($path.$time.$ext)){
-			$clip = '<a href="'.IMG_DIR.$time.$ext.'" target="_blank" rel="noopener">'.$time.$ext.'</a><br>';
-			$size = filesize($path.$time.$ext);
-			$all += $size;	//ファイルサイズ加算
-			$chk= substr($chk,0,10);//md5
-			}
-			$bg = ($j % 2) ? ADMIN_DELGUSU : ADMIN_DELKISU;//背景色
+			$host,$pw,$ext,$w,$h,$time,$chk,) = explode(",",$value);
+		$res= [
+			'size' => 0,
+			'no' => $no,
+			'host' => $host,
+			'clip' => "",
+			'chk' => "",
+		] ;
+		$res['now']  = preg_replace("/( ID:.*)/","",$date);//ID以降除去
+		$res['name'] = strip_tags($name);//タグ除去
+		$res['sub'] = strip_tags($sub);
+		if(strlen($res['name']) > 10) $res['name'] = mb_strcut($res['name'],0,9).".";
+		if(strlen($res['sub']) > 10) $res['sub'] = mb_strcut($res['sub'],0,9).".";
+		$res['email']=filter_var($email, FILTER_VALIDATE_EMAIL);
+		$res['com'] = preg_replace("#<br( *)/?>#i"," ",$com);
+		$res['com'] = strip_tags($res['com']);
+		if(strlen($res['com']) > 20) $res['com'] = mb_strcut($res['com'],0,18) . ".";
 
-			$dat['del'][] = compact('bg','no','now','sub','name','com','host','clip','size','chk');
+		$res['bg'] = ($j % 2) ? ADMIN_DELGUSU : ADMIN_DELKISU;//背景色
+		
+		foreach($res as $key => $val){
+			$res[$key]=h($val);
 		}
+		if($ext && is_file($path.$time.$ext)){
+			$res['size'] = filesize($path.$time.$ext);
+			$all += $res['size'];	//ファイルサイズ加算
+			$res['chk']= h(substr($chk,0,10));//md5
+			$res['clip'] = '<a href="'.IMG_DIR.$time.$ext.'" target="_blank" rel="noopener">'.$time.$ext.'</a><br>';
 		}
-		$dat['all'] = ($all - ($all % 1024)) / 1024;
-		if(is_array($del)){
-			sort($del);
-			reset($del);
-			$fp=fopen(LOGFILE,"r+");
-			set_file_buffer($fp, 0);
-			flock($fp, LOCK_EX);
-			$buf=fread($fp,5242880);
-			if(!$buf){error(MSG030);}
-			$buf = charconvert($buf);
-			$line = explode("\n", trim($buf));
-			$find = false;
-			foreach($line as $i => $value){
-				if($value!==""){
-					list($no,,,,,,,,,$ext,,,$time,,) = explode(",",$value);
-					if(in_array($no,$del)){
-						if(!$onlyimgdel){	//記事削除
-							treedel($no);
-							unset($line[$i]);
-							$find = true;
-						}
-						delete_files($path, $time, $ext);
-					}
-				}
-			}
-			if($find){//ログ更新
-				writeFile($fp, implode("\n", $line));
-			}
-			closeFile($fp);
+		if($res['email']){
+			$res['name']='<a href="mailto:'.$res['email'].'">'.$res['name'].'</a>';
 		}
-
-		htmloutput(SKIN_DIR.OTHERFILE,$dat);
-		exit;
+		$dat['del'][] = $res;
+		}
 	}
+	$dat['all'] = ($all - ($all % 1024)) / 1024;
+
+	if(is_array($del)){
+		sort($del);
+		reset($del);
+		$fp=fopen(LOGFILE,"r+");
+		set_file_buffer($fp, 0);
+		flock($fp, LOCK_EX);
+		$buf=fread($fp,5242880);
+		if(!$buf){error(MSG030);}
+		$buf = charconvert($buf);
+		$line = explode("\n", trim($buf));
+		$find = false;
+		foreach($line as $i => $value){
+			if($value!==""){
+				list($no,,,,,,,,,$ext,,,$time,,) = explode(",",$value);
+			if(in_array($no,$del)){
+				if(!$onlyimgdel){	//記事削除
+					treedel($no);
+					unset($line[$i]);
+					$find = true;
+				}
+				delete_files($path, $time, $ext);
+			}
+			}
+		}
+		if($find){//ログ更新
+			writeFile($fp, implode("\n", $line));
+		}
+		closeFile($fp);
+	}
+
+	htmloutput(SKIN_DIR.OTHERFILE,$dat);
+	exit;
+}
 
 function init(){
 	$err='';
@@ -1429,6 +1448,9 @@ function paintform(){
 	$type = newstring(filter_input(INPUT_POST, 'type'));
 	$pwd = newstring(filter_input(INPUT_POST, 'pwd'));
 	$resto = filter_input(INPUT_POST, 'resto',FILTER_VALIDATE_INT);
+	if(strlen($resto)>1000){
+		error(MSG015);
+	}
 	$mode = filter_input(INPUT_POST, 'mode');
 	$picw = filter_input(INPUT_POST, 'picw',FILTER_VALIDATE_INT);
 	$pich = filter_input(INPUT_POST, 'pich',FILTER_VALIDATE_INT);
@@ -1440,7 +1462,14 @@ function paintform(){
 	$quality = filter_input(INPUT_POST, 'quality',FILTER_VALIDATE_INT);
 	$no = filter_input(INPUT_POST, 'no',FILTER_VALIDATE_INT);
 	$is_mobile = filter_input(INPUT_POST, 'is_mobile',FILTER_VALIDATE_BOOLEAN);
-	
+
+	if(strlen($pwd) > 72) error(MSG015);
+
+	if($picw < 300) $picw = 300;
+	if($pich < 300) $pich = 300;
+	if($picw > PMAX_W) $picw = PMAX_W;
+	if($pich > PMAX_H) $pich = PMAX_H;
+
 	//Cookie保存
 	setcookie("appletc", $shi , time()+(86400*SAVE_COOKIE));//アプレット選択
 	setcookie("picwc", $picw , time()+(86400*SAVE_COOKIE));//幅
@@ -1457,13 +1486,13 @@ function paintform(){
 	//pchファイルアップロードペイント
 	if($admin&&($admin===$ADMIN_PASS)){
 		
+		$pchtmp= isset($_FILES['pch_upload']['tmp_name']) ? $_FILES['pch_upload']['tmp_name'] :'';
+		if($pchtmp && in_array($_FILES['pch_upload']['error'],[1,2])){//容量オーバー
+			error(MSG034);
+		} 
+		if ($pchtmp && $_FILES['pch_upload']['error'] === UPLOAD_ERR_OK){
 		$pchfilename = isset($_FILES['pch_upload']['name']) ? newstring(basename($_FILES['pch_upload']['name'])) : '';
-		
-		if($pchfilename!==""){//空文字でなければ続行
-			$pchtmp=$_FILES['pch_upload']['tmp_name'];
-			if(in_array($_FILES['pch_upload']['error'],[1,2])){//容量オーバー
-				error(MSG034);
-			} 
+
 			$time = time().substr(microtime(),2,3);
 			$pchext=pathinfo($pchfilename, PATHINFO_EXTENSION);
 			$pchext=strtolower($pchext);//すべて小文字に
@@ -1567,10 +1596,6 @@ function paintform(){
 		$useneo=$is_mobile;//mobileの時はNEOしか起動しない。
 	}
 
-	if($picw < 300) $picw = 300;
-	if($pich < 300) $pich = 300;
-	if($picw > PMAX_W) $picw = PMAX_W;
-	if($pich > PMAX_H) $pich = PMAX_H;
 	if(!$useneo && $shi){
 	$w = $picw + 510;//しぃぺの時の幅
 	$h = $pich + 120;//しぃぺの時の高さ
@@ -1690,19 +1715,20 @@ function paintcom(){
 	$tmplist = array();
 	$handle = opendir(TEMP_DIR);
 	while ($file = readdir($handle)) {
-		if(!is_dir($file) && preg_match("/\.(dat)\z/i",$file)) {
+		if(!is_dir($file) && pathinfo($file, PATHINFO_EXTENSION)==='dat') {
+
 			$fp = fopen(TEMP_DIR.$file, "r");
 			$userdata = fread($fp, 1024);
 			fclose($fp);
 			list($uip,$uhost,$uagent,$imgext,$ucode,) = explode("\t", rtrim($userdata));
-			$file_name = preg_replace("/\.(dat)\z/i","",$file);
+			$file_name = pathinfo($file, PATHINFO_FILENAME);
 			if(is_file(TEMP_DIR.$file_name.$imgext)) //画像があればリストに追加
-				$tmplist[] = $ucode."\t".$uip."\t".$file_name.$imgext;
+			$tmplist[] = $ucode."\t".$uip."\t".$file_name.$imgext;
 		}
 	}
 	closedir($handle);
 	$tmp = array();
-	if(count($tmplist)!=0){
+	if(count($tmplist)!==0){
 		foreach($tmplist as $tmpimg){
 			list($ucode,$uip,$ufilename) = explode("\t", $tmpimg);
 			if($ucode == $usercode||$uip == $userip){
@@ -1722,10 +1748,10 @@ function paintcom(){
 		sort($tmp);
 		reset($tmp);
 		foreach($tmp as $tmpfile){
-			$src = TEMP_DIR.$tmpfile;
-			$srcname = $tmpfile;
-			$date = date("Y/m/d H:i", filemtime($src));
-			$dat['tmp'][] = compact('src','srcname','date');
+			$tmp_img['src'] = TEMP_DIR.$tmpfile;
+			$tmp_img['srcname'] = $tmpfile;
+			$tmp_img['date'] = date("Y/m/d H:i", filemtime($tmp_img['src']));
+			$dat['tmp'][] = $tmp_img;
 		}
 	}
 
@@ -1871,9 +1897,7 @@ function editform(){
 	//csrfトークンをセット
 	$dat['token']='';
 	if(CHECK_CSRF_TOKEN){
-		$token=get_csrf_token();
-		$_SESSION['token']=$token;
-		$dat['token']=$token;
+		$dat['token']=get_csrf_token();
 	}
 
 	$del = filter_input(INPUT_POST,'del',FILTER_VALIDATE_INT,FILTER_REQUIRE_ARRAY);//$del は配列
@@ -1890,22 +1914,25 @@ function editform(){
 	$fp=fopen(LOGFILE,"r");
 	flock($fp, LOCK_EX);
 	$buf=fread($fp,5242880);
-	closeFile($fp);
 	if(!$buf){error(MSG019);}
 	$buf = charconvert($buf);
 	$line = explode("\n", trim($buf));
 	$flag = FALSE;
 	foreach($line as $value){
 		if($value){
-			list($no,,$name,$email,$sub,$com,$url,$ehost,$pass,,,,,,,$fcolor) = explode(",", rtrim($value));
+			list($no,,$name,$email,$sub,$com,$url,$ehost,$pass,,,,$time,,,$fcolor) = explode(",", rtrim($value));
 			if ($no == $del[0] && check_password($pwd, $pass, $pwd)){
 				$flag = TRUE;
 				break;
 			}
 		}
 	}
+	closeFile($fp);
 	if(!$flag) {
 		error(MSG028);
+	}
+	if((!$pwd || $pwd!==$ADMIN_PASS) && !check_elapsed_days($time)){//指定日数より古い記事の編集はエラーにする
+			error(MSG028);
 	}
 
 	$dat['post_mode'] = true;
@@ -1937,6 +1964,7 @@ function editform(){
 
 // 記事上書き
 function rewrite(){
+global $ADMIN_PASS;
 
 	if(($_SERVER["REQUEST_METHOD"]) !== "POST") error(MSG006);
 
@@ -1960,13 +1988,13 @@ function rewrite(){
 	$host = gethostbyaddr($userip);
 	check_badip($host);
 	//NGワードがあれば拒絶
-	Reject_if_NGword_exists_in_the_post($com,$name,$email,$url,$sub);
+	Reject_if_NGword_exists_in_the_post();
 
 	// 時間
 	$date = now_date(time());//日付取得
 	$date .= UPDATE_MARK;
 	if(DISP_ID){
-		$date .= " ID:" . getId($userip, time());
+		$date .= " ID:" . getId($userip);
 	}
 	$date = str_replace(",", "&#44;", $date);//カンマをエスケープ
 
@@ -2003,6 +2031,10 @@ function rewrite(){
 		}
 	}
 	if(!$flag){
+		closeFile($fp);
+		error(MSG028);
+	}
+	if((!$admin || $admin!==$ADMIN_PASS) && !check_elapsed_days($time)){//指定日数より古い記事の編集はエラーにする
 		closeFile($fp);
 		error(MSG028);
 	}
@@ -2056,7 +2088,8 @@ function replace(){
 	//描画時間を$userdataをもとに計算
 	$psec='';
 	$_ptime = '';
-	if($psec=$postedtime-$starttime){
+	if($starttime && is_numeric($starttime)){
+		$psec=(int)$postedtime-(int)$starttime;
 		$_ptime = calcPtime($psec);
 	}
 
@@ -2113,23 +2146,18 @@ function replace(){
 			$message = UPLOADED_OBJECT_NAME.UPLOAD_SUCCESSFUL."<br><br>";
 
 			//縮小表示 元のサイズを最大値にセット
-			$reduced_size=image_reduction_display($w,$h,$max_w,$max_h);
-				$w=$reduced_size['w'];
-				$h=$reduced_size['h'];
+			list($w,$h)=image_reduction_display($w,$h,$max_w,$max_h);
 	
 			//サムネイル作成
 			if(USE_THUMB){thumb($path,$time,$imgext,$max_w,$max_h);}
 
-			//ワークファイル削除
-			safe_unlink($upfile);
-			safe_unlink($temppath.$file_name.".dat");
+			$src='';
 			//chiファイルアップロード
 			if(is_file($temppath.$file_name.'.chi')){
 				$src = $temppath.$file_name.'.chi';
 				$dst = PCH_DIR.$time.'.chi';
 				if(copy($src, $dst)){
 					chmod($dst,PERMISSION_FOR_DEST);
-					unlink($src);
 				}
 			}
 
@@ -2140,16 +2168,12 @@ function replace(){
 				$dst = PCH_DIR . $time . $pchext;
 				if(copy($src, $dst)){
 					chmod($dst, PERMISSION_FOR_DEST);
-					unlink($src);
 				}
 			}
-
-			//旧ファイル削除
-			delete_files($path, $etim, $ext);
 			
 			//ID付加
 			if(DISP_ID){
-				$date .= " ID:" . getId($userip, time());
+				$date .= " ID:" . getId($userip);
 			}
 			//描画時間追加
 			if($ptime && $_ptime){
@@ -2161,17 +2185,26 @@ function replace(){
 			$date=DO_NOT_CHANGE_POSTS_TIME ? $edate : $date;
 			$line[$i] = "$no,$date,$name,$email,$sub,$com,$url,$host,$epwd,$imgext,$w,$h,$time,$chk,$ptime,$fcolor";
 			$flag = true;
+			//旧ファイル削除
+			delete_files($path, $etim, $ext);
+
 			break;
 		}
 	}
 	if(!$flag){
 		closeFile($fp);
-		error(MSG028);
+		return error(MSG028);
 	}
 
 	writeFile($fp, implode("\n", $line));
 
 	closeFile($fp);
+
+	//ワークファイル削除
+	safe_unlink($src);
+	safe_unlink($upfile);
+	safe_unlink($temppath.$file_name.".dat");
+
 
 	updatelog();
 	redirect(
@@ -2196,37 +2229,34 @@ function catalog(){
 	$pagedef = CATALOG_X * CATALOG_Y;//1ページに表示する件数
 	$dat = form();
 	for($i = $page; $i < $page+$pagedef; ++$i){
-		//空文字ではなく未定義になっている
 		if(!isset($tree[$i])){
-			$dat['y'][$y]['x'][$x]['noimg'] = true;
-		}else{
-			$treeline = explode(",", rtrim($tree[$i]));
-			$disptree = $treeline[0];
-			if(!isset($lineindex[$disptree])) continue; //範囲外なら次の行
-			$j=$lineindex[$disptree]; //該当記事を探して$jにセット
-
-			$res = create_res($line[$j]);
-
-			// カタログ専用ロジック
-			if ($res['img_file_exists']) {
-				if($res['w'] && $res['h']){
-					if($res['w'] > CATALOG_W){
-						$res['h'] = ceil($res['h'] * (CATALOG_W / $res['w']));//端数の切り上げ
-						$res['w'] = CATALOG_W; //画像幅を揃える
-					}
-				}else{//ログに幅と高さが記録されていない時
-					$res['w'] = CATALOG_W;
-					$res['h'] = null;
-				}
-			}
-			
-			$res['txt'] = !$res['img_file_exists']; // 画像が無い時
-			$res['rescount'] = count($treeline) - 1;
-
-			// 記事格納
-			$dat['y'][$y]['x'][$x] = $res;
+			continue;
 		}
+		$treeline = explode(",", rtrim($tree[$i]));
+		$disptree = $treeline[0];
+		if(!isset($lineindex[$disptree])) continue; //範囲外なら次の行
+		$j=$lineindex[$disptree]; //該当記事を探して$jにセット
 
+		$res = create_res($line[$j]);
+
+		// カタログ専用ロジック
+		if ($res['img_file_exists']) {
+			if($res['w'] && $res['h']){
+				if($res['w'] > CATALOG_W){
+					$res['h'] = ceil($res['h'] * (CATALOG_W / $res['w']));//端数の切り上げ
+					$res['w'] = CATALOG_W; //画像幅を揃える
+				}
+			}else{//ログに幅と高さが記録されていない時
+				$res['w'] = CATALOG_W;
+				$res['h'] = null;
+			}
+		}
+		
+		$res['txt'] = !$res['img_file_exists']; // 画像が無い時
+		$res['rescount'] = count($treeline) - 1;
+
+		// 記事格納
+		$dat['y'][$y]['x'][$x] = $res;
 		$x++;
 		if($x == CATALOG_X){$y++; $x=0;}
 	}
@@ -2249,7 +2279,7 @@ function catalog(){
 		if(($i>=$start_page)&&($i<=$end_page)){//ページ数を表示する範囲
 			if($i === $end_page){//特定のページに代入される記号 エンド
 				$rep_page_no="≫";
-			}elseif($i!==0&&$i == $start_page){//スタート
+			}elseif($i!==0 && $i == $start_page){//スタート
 				$rep_page_no="≪";
 			}else{//ページ番号
 				$rep_page_no=$pn;
@@ -2276,9 +2306,25 @@ function charconvert($str){
 }
 
 // NGワードがあれば拒絶
-function Reject_if_NGword_exists_in_the_post($com,$name,$email,$url,$sub){
+function Reject_if_NGword_exists_in_the_post(){
 	global $badstring,$badname,$badstr_A,$badstr_B,$pwd,$ADMIN_PASS,$admin;
+
+	$com = filter_input(INPUT_POST, 'com');
+	$name = filter_input(INPUT_POST, 'name');
+	$email = filter_input(INPUT_POST, 'email');
+	$sub = filter_input(INPUT_POST, 'sub');
+	$url = filter_input(INPUT_POST, 'url',FILTER_VALIDATE_URL);
+	$pwd = filter_input(INPUT_POST, 'pwd');
+
+	if(strlen($com) > MAX_COM) error(MSG011);
+	if(strlen($name) > MAX_NAME) error(MSG012);
+	if(strlen($email) > MAX_EMAIL) error(MSG013);
+	if(strlen($sub) > MAX_SUB) error(MSG014);
+	if(strlen($url) > 200) error(MSG015);
+	if(strlen($pwd) > 72) error(MSG015);
+
 	//チェックする項目から改行・スペース・タブを消す
+
 	$chk_com  = preg_replace("/\s/u", "", $com );
 	$chk_name = preg_replace("/\s/u", "", $name );
 	$chk_email = preg_replace("/\s/u", "", $email );
@@ -2325,14 +2371,9 @@ function create_formatted_text_from_post($com,$name,$email,$url,$sub,$fcolor,$de
 	$name = str_replace("◆", "◇", $name);
 	$sage=(stripos($email,'sage')!==false);//メールをバリデートする前にsage判定
 	$email = filter_var($email, FILTER_VALIDATE_EMAIL);
-	if(strlen($com) > MAX_COM) error(MSG011,$dest);
-	if(strlen($name) > MAX_NAME) error(MSG012,$dest);
-	if(strlen($email) > MAX_EMAIL) error(MSG013,$dest);
-	if(strlen($sub) > MAX_SUB) error(MSG014,$dest);
 	if(USE_NAME&&!$name) error(MSG009,$dest);
 	if(USE_COM&&!$com) error(MSG008,$dest);
 	if(USE_SUB&&!$sub) error(MSG010,$dest);
-	
 
 	// 改行コード
 	$com = str_replace(["\r\n","\r"], "\n", $com);
@@ -2408,11 +2449,7 @@ function image_reduction_display($w,$h,$max_w,$max_h){
 		$w=ceil($w * $keys);
 		$h=ceil($h * $keys);
 	}
-	$reduced_size=
-	[
-		'w' => $w,
-		'h' => $h,
-	];
+	$reduced_size = [$w,$h];
 	return $reduced_size;
 }
 
@@ -2577,6 +2614,8 @@ function create_res ($line, $options = []) {
 	list($res['name'], $res['trip']) = separateNameAndTrip($name);
 	$res['name']=strip_tags($res['name']);
 	$res['encoded_name'] = urlencode($res['name']);
+	$res['share_name'] = encode_for_share($res['name']);
+	$res['share_sub'] = encode_for_share($res['sub']);
 
 	$com = preg_replace("#<br( *)/?>#i","\n",$com); //<br />を改行に戻す
 	$res['com']=strip_tags($com);//タグ除去
@@ -2592,10 +2631,19 @@ function create_res ($line, $options = []) {
 		$res['com'] = auto_link($res['com']);
 	}
 	$res['com']=nl2br($res['com'],false);//改行を<br>へ
-	$res['com'] =  preg_replace("/(^|>)((&gt;|＞)[^<]*)/i", "\\1".RE_START."\\2".RE_END, $res['com']); // '>'色設定
+	$res['com'] = preg_replace("/(^|>)((&gt;|＞)[^<]*)/i", "\\1".RE_START."\\2".RE_END, $res['com']); // '>'色設定
 	
 	return $res;
 }
+//Tweet
+function encode_for_share($str){
+	//大なり小なりなど一部の情報は失われる
+	$str = str_replace(["&lt;","&gt;"], "", $str);
+	$str = str_replace("&#44;",",", $str);
+	$str = htmlspecialchars_decode($str, ENT_QUOTES);
+	return urlencode(strip_tags($str));
+}
+
 
 /**
  * 日付とIDを分離
@@ -2648,14 +2696,14 @@ function closeFile ($fp) {
 	fclose($fp);
 }
 
-function getId ($userip, $time) {
-	return substr(crypt(md5($userip.ID_SEED.date("Ymd", $time)),'id'),-8);
+function getId ($userip) {
+	return substr(hash('sha256', $userip.ID_SEED, false),-8);
 }
 
 // 古いスレッドへの投稿を許可するかどうか
-function check_elapsed_days ($res) {
+function check_elapsed_days ($time) {
 	return ELAPSED_DAYS //古いスレッドのフォームを閉じる日数が設定されていたら
-		? ((time() - (int)(substr($res['time'], -13, -3))) <= ( ELAPSED_DAYS * 86400)) // 指定日数以内なら許可
+		? ((time() - (int)(substr($time, -13, -3))) <= ((int)ELAPSED_DAYS * 86400)) // 指定日数以内なら許可
 		: true; // フォームを閉じる日数が未設定なら許可
 }
 

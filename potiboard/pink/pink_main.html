@@ -22,7 +22,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 <link rel="stylesheet" href="<% echo(skindir) %>pink.css">
 <link rel="stylesheet" href="<% echo(skindir) %>icomoon/style.css">
-<style>span.canvas_size_wrap {display: inline-block;padding: 8px 0 0;}</style>
+<style>.input_disp_none{display: none;}span.canvas_size_wrap {display: inline-block;padding: 8px 0 0;}</style>
 <style id="for_mobile"></style>
 <title><% echo (title) %></title>
 <% def(n) %>
@@ -440,7 +440,7 @@ PMAX_H //高さ
 <div class="res_button_wrap">
 	<% def(sharebutton) %>
 	<span class="share_button">
-		<a target="_blank" href="https://twitter.com/intent/tweet?text=%5B<% echo(oya/no|urlencode) %>%5D%20<% echo(oya/sub|urlencode) %>%20by%20<% echo(oya/name|urlencode) %>%20-%20<% echo(title|urlencode) %>&url=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-twitter"></span>tweet</a>
+		<a target="_blank" href="https://twitter.com/intent/tweet?text=%5B<% echo(oya/no|urlencode) %>%5D%20<% def(oya/share_sub)%><% echo(oya/share_sub) %><% else %><% echo(oya/sub|urlencode) %><% /def %>%20by%20<% def(oya/share_name)%><% echo(oya/share_name) %><% else %><% echo(oya/name|urlencode) %><% /def %>%20-%20<% echo(title|urlencode) %>&url=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-twitter"></span>tweet</a>
 		<a target="_blank" class="fb btn" href="http://www.facebook.com/share.php?u=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-facebook2"></span>share</a>
 	</span>
 	<% /def %>
@@ -476,6 +476,7 @@ PMAX_H //高さ
 <form action="<% echo (self) %>" method="post">
 <div class="mente_wrap">
 <span class="nk">記事No.<input type="number" min="1" name="del[]" autocomplete="off" class="edit_number"></span>
+<span class="input_disp_none"><input type="text" value="" autocomplete="username"></span>
 <span class="nk">削除キー<input type="password" name="pwd" size="8" value="" autocomplete="current-password" class="edit_password"></span>
 <select name="mode">
 <option value="edit">編集</option>
@@ -521,11 +522,15 @@ l(); //LoadCookie
 <div id="bottom"></div>
 <script src="<% echo(skindir) %>jquery-3.5.1.min.js"></script>
 <script>
-	$(function(){//2度押し対策
-		$('[type="submit"]').click(function(){
+	window.onpageshow = function(){
+		var $btn = $('[type="submit"]');
+		//disbledを解除
+		$btn.prop('disabled', false);
+		$btn.click(function(){//送信ボタン2度押し対策
 			$(this).prop('disabled',true);
 			$(this).closest('form').submit();
 		});
-	});
+	}
 </script>
-</body></html>
+</body>
+</html>

@@ -19,23 +19,45 @@ body {
 }
 
 a:link {
-  color: #66F;
+  color: #CCC;
 }
 
 a:visited {
-  color: #999;
+  color: #CCC;
 }
 
 a:active {
-  color: #F33;
+  color: #FEFEFE;
 }
 
 a:hover {
-  color: #F33;
+  color: #FEFEFE;
+}
+
+h2 a:link {
+  color: #FEFEFE;
+}
+
+h2 a:visited {
+  color: #FEFEFE;
+}
+
+h2 a:active {
+  color: #FEFEFE;
+}
+
+h2 a:hover {
+  color: #FEFEFE;
+  background-color: #4b545f;
+}
+
+h2 a {
+  display: block;
+  text-decoration: none;
 }
 
 hr {
-  border: dashed 1px #99F;
+  border: dashed 1px #605f7c;
   margin: 1ex auto;
 }
 
@@ -43,23 +65,23 @@ hr.hr {
   clear: both;
 }
 
-header, main > section > .thread, main > article#catalog, footer > article, footer > article.copy, main > section > .thread, footer > article {
+header, main > section > .thread, main > div#catalog, footer > div, footer > div.copy, main > section > .thread, footer > div {
   background-color: #333333;
   padding: 8px;
 }
 
-header, main > section > .thread, main > article#catalog, footer > article, footer > article.copy {
+header, main > section > .thread, main > div#catalog, footer > div, footer > div.copy {
   margin: 0px auto;
   display: block;
   max-width: 1350px;
-  border: solid 1px #99F;
+  border: solid 1px #605f7c;
 }
 
-footer > article form {
+footer > div form {
   text-align: right;
 }
 
-footer > article.copy {
+footer > div.copy {
   text-align: right;
 }
 
@@ -107,7 +129,7 @@ input[name="pwd"], textarea[name="pwd"], select[name="pwd"], .se[name="pwd"] {
 }
 
 input[value="お絵かき"], textarea[value="お絵かき"], select[value="お絵かき"], button.copy_button, .se[value="お絵かき"], .button {
-  background-color: #69F;
+  background-color: #6f90d1;
   color: #FFF;
 }
 
@@ -142,7 +164,7 @@ em.thispage {
 
 .name {
   line-height: 1em;
-  border: solid 1px #69F;
+  border: solid 1px #6f90d1;
   border-radius: 5px;
   display: inline-block;
 }
@@ -155,11 +177,7 @@ em.thispage {
 }
 
 .name:hover {
-  background-color: #111111;
-}
-
-h1 + div {
-  text-align: right;
+  background-color: #222;
 }
 
 h1 a {
@@ -167,13 +185,16 @@ h1 a {
 }
 
 h2 {
-  border-left: solid 1ex #99F;
-  background-color: #036;
-  padding-left: 5px;
+  border-left: solid 1ex #605f7c;
+  background-color: #3b4856;
 }
 
 h3 {
   margin-top: 1ex;
+}
+
+h1 + div {
+  text-align: right;
 }
 
 figure {
@@ -188,6 +209,11 @@ figure img {
 }
 
 figcaption {
+  font-size: smaller;
+  margin: 10px 0;
+}
+
+.img_info_wrap {
   font-size: smaller;
   margin: 10px 0;
 }
@@ -215,13 +241,13 @@ ul.menu {
   float: none;
 }
 
-.res article {
+.res .comment_wrap {
+  min-width: 300px;
   display: table;
-  min-width: 250px;
 }
 
 .resma {
-  color: #44DD44;
+  color: #c5ced6;
 }
 
 .thfoot {
@@ -243,12 +269,39 @@ ul.menu {
   color: #FFF;
 }
 
+.oyano {
+  padding-left: 5px;
+}
+
 .oyano, .oyaresno {
   font-weight: bold;
 }
 
 .oekaki {
   font-size: smaller;
+  padding-left: 5px;
+}
+
+div.tmpimg {
+  text-align: right;
+  margin: 15px 0 0;
+}
+
+.siihelp h2 {
+  padding-left: 5px;
+  margin: 15px 0;
+}
+
+.siihelp ul {
+  font-size: inherit;
+}
+
+p.err {
+  margin: 15px 0;
+}
+
+form.adminin {
+  margin: 15px 0;
 }
 
 #appstage {
@@ -261,24 +314,36 @@ ul.menu {
   vertical-align: middle;
 }
 
+.siihelp dd {
+  margin: 0 0 12px;
+}
+
+.siihelp dt {
+  display: list-item;
+  margin: 3px 0;
+  list-style: circle;
+  list-style-position: inside;
+  padding-left: 5px;
+}
+
 .NEO .color_bk {
-  color: #69F;
+  color: #333;
 }
 
 .NEO .color_bk2 {
-  color: #369;
+  color: #222;
 }
 
 .NEO .color_tool_icon {
-  color: #396;
+  color: #333;
 }
 
 .NEO .color_icon {
-  color: #063;
+  color: #333;
 }
 
 .NEO .color_iconselect {
-  color: #063;
+  color: #333;
 }
 
 .NEO .color_text {
@@ -286,7 +351,7 @@ ul.menu {
 }
 
 .NEO .color_bar {
-  color: #369;
+  color: #646464;
 }
 
 .NEO .tool_color_button {
@@ -302,11 +367,11 @@ ul.menu {
 }
 
 .NEO .tool_color_bar {
-  color: #69F;
+  color: #444a53;
 }
 
 .NEO .tool_color_frame {
-  color: #369;
+  color: #222;
 }
 
 .palette {
@@ -371,7 +436,7 @@ ul.menu {
 }
 
 .delfo tr:nth-child(odd) {
-  background-color: #036;
+  background-color: #3b4856;
 }
 
 p.page {
@@ -404,8 +469,8 @@ p.page {
   font-family: "Hiragino Sans", meiryo, ヒラギノ角ゴシック, メイリオ, sans-serif;
   font-size: 16px;
   line-height: 150%;
-  color: #FFF;
-  background-color: #222;
+  color: #FEFEFE;
+  background-color: #333333;
   letter-spacing: .08em;
 }
 
@@ -421,6 +486,16 @@ p.page {
   display: inline-block;
   margin: 0 0 8px;
   background-color: inherit;
+  padding-left: 5px;
+}
+
+#search h2 a {
+  color: #FEFEFE;
+}
+
+#search h2 a:hover {
+  color: #FEFEFE;
+  background-color: #333333;
 }
 
 #search h3 {
@@ -431,14 +506,14 @@ p.page {
 
 #search .title {
   color: #FFF;
-  background-color: #333;
-  border-left: 8px solid #369;
+  border-left: solid 1ex #605f7c;
+  background-color: #3b4856;
   padding: 6px 5px 2px;
   margin: 0 0 10px;
 }
 
 #search a {
-  color: #669;
+  color: #CCC;
   text-decoration: underline;
 }
 
@@ -512,19 +587,19 @@ p.page {
   border: 1px solid;
   color: #FFF;
   border-color: #69C;
-  background-color: #003;
+  background-color: #333;
   vertical-align: middle;
 }
 
 #search input[type=text]:hover, #search textarea[type=text]:hover, #search select[type=text]:hover, #search .se[type=text]:hover {
-  background-color: #001;
+  background-color: #222229;
 }
 
 #search input[type=submit], #search textarea[type=submit], #search select[type=submit], #search .se[type=submit] {
-  color: #000;
+  background-color: #6f90d1;
+  color: #FFF;
   border: 1px solid;
-  border-color: #69C;
-  background-color: #369;
+  border-color: #6f859a;
   vertical-align: middle;
 }
 
@@ -534,15 +609,15 @@ p.page {
 
 #search .name {
   font-weight: 700;
-  color: #FFF;
+  color: inherit;
   display: inline-block;
-  border: 1px solid #336;
+  border: solid 1px #6f90d1;
   border-radius: 6px;
   line-height: 1em;
 }
 
 #search .name:hover {
-  background-color: #669;
+  background-color: #222;
 }
 
 #search .name a {
@@ -576,10 +651,6 @@ p.page {
   width: 5em;
 }
 
-#search .res_button:hover {
-  background-color: #69C;
-}
-
 #search .res_button form {
   display: inherit;
 }
@@ -595,22 +666,23 @@ p.page {
 }
 
 #search input[type=radio]:checked + label, #search textarea[type=radio]:checked + label, #search select[type=radio]:checked + label, #search .se[type=radio]:checked + label {
-  color: #000;
+  color: #333;
   background: #DDF;
 }
 
 #search .label {
-  color: #666;
+  color: #bbb;
   display: inline-block;
   padding: 0 10px;
   text-align: center;
   cursor: pointer;
-  border: 2px solid #66C;
+  border: 2px solid #6f90d1;
   border-radius: 15px;
 }
 
 #search .label:hover {
-  background-color: #EEF;
+  color: #333;
+  background-color: #DDF;
 }
 
 #search .radio {

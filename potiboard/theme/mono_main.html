@@ -59,6 +59,7 @@
 		<meta property="og:image:width" content="1028"> 
 		<meta property="og:image:height" content="1028">
 		<meta property="og:url" content="<% echo(rooturl) %>">
+		<meta name="description" content="">
 		<% /def %>
 		<% def(resno) %><% each(oya) %>
 		<meta name="twitter:card" content="summary">
@@ -66,10 +67,12 @@
 		<meta property="og:site_name" content="">
 		<meta property="og:title" content="[<% echo(oya/no) %>] <% echo(oya/sub) %> by <% echo(oya/name) %> - <% echo(title) %>">
 		<meta property="og:type" content="article">
-		<meta property="og:description" content="">
+		<meta property="og:description" content="<% echo (oya/descriptioncom) %>">
 		<meta property="og:url" content="<% echo(rooturl) %><% echo(self) %>?res=<% echo(oya/no) %>">
 		<% def(oya/src) %><meta property="og:image" content="<% echo(rooturl) %><% echo(oya/imgsrc) %>"><% /def %>
-		<% /each %><% /def %>
+		<meta name="description" content="<% echo (oya/descriptioncom) %>">
+		<% /each %>
+		<% /def %>
 		<style id="for_mobile"></style>
 	</head>
 	<body>
@@ -88,11 +91,12 @@
 					<% /def %>
 					<a href="<% echo(self) %>?mode=catalog">[カタログ]</a>
 					[通常モード]
-					<a href="<% echo(self) %>?mode=piccom<% def(resno) %>&amp;resto=<% echo(resno) %><% /def %>">[投稿途中の絵]</a>
+					<a href="<% echo(self) %>?mode=piccom">[投稿途中の絵]</a>
 					<a href="#footer" title="一番下へ">[↓]</a>
 				</nav>
 				<hr>
 				<% def(resno) %>
+				<% def(form) %>
 				<p class="resm">
 					レス送信モード
 					<% each(oya) %>
@@ -106,11 +110,12 @@
 				</p>
 				<hr>
 				<% /def %>
+				<% /def %>
 				<% def(paintform) %>
 				<% def(paint) %>
 				<script>
 				function is_mobile() {
-				if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 769px)').matches))  return true;
+				if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 768px)').matches))  return true;
 				return false;
 				}
 				if(is_mobile()){
@@ -168,7 +173,7 @@
 						<input type="hidden" name="mode" value="regist">
 						<% def(resno) %><input type="hidden" name="resto" value="<% echo(resno) %>"><% /def %>
 						<input type="hidden" name="MAX_FILE_SIZE" value="<% echo(maxbyte) %>">
-						<table summary="投稿フォーム">
+						<table>
 							<tr>
 								<td>Name<% def(usename) %><% echo(usename) %><% /def %></td>
 								<td><input class="form" type="text" name="name" size="28" value="" autocomplete="username"></td>
@@ -207,7 +212,7 @@
 							<% /def %>
 							<tr>
 								<td>Pass</td>
-								<td><input class="form" type="password" name="pwd" size="8" value="" autocomplete="current-password"><small>記事の削除に必要</small></td>
+								<td><input class="form" type="password" name="pwd" value="" autocomplete="current-password"><small>(記事の編集削除用)</small></td>
 							</tr>
 						</table>
 						<ul>
@@ -247,26 +252,34 @@
 						<div class="img_info_wrap">
 							<a href="<% echo(oya/src) %>" title="<% echo(oya/sub) %>" target="_blank"><% echo(oya/srcname) %></a> (<% echo(oya/size) %> B)<% def(oya/thumb) %> - サムネイル表示中 -<% /def %><% def(oya/painttime) %> PaintTime : <% echo(oya/painttime) %><% /def %>
 							<br>
-							<% def(oya/continue) %> <a href="<% echo(self) %>?mode=continue&amp;no=<% echo(oya/continue) %>">●続きを描く</a><% /def %><% def(oya/pch) %> <a href="<% echo(self) %>?mode=openpch&amp;pch=<% echo(oya/pch) %>" target="_blank">●動画</a><% /def %>
+							<% def(oya/continue) %> <a href="<% echo(self) %>?mode=continue&amp;no=<% echo(oya/continue) %>">●続きを描く</a><% /def %><% def(oya/spch)%><span class="for_pc"><% /def %><% def(oya/pch) %> <a href="<% echo(self) %>?mode=openpch&amp;pch=<% echo(oya/pch) %>" target="_blank">●動画</a><% /def %>
+								<% def(oya/spch)%></span><% /def %>
 						</div>
-						<figure>
+						<figure <% if(oya/w,>=,748) %>style="float:none;margin-right:0"<% /if %>>
 							<% def(oya/thumb) %>
-							<a href="<% echo(oya/src) %>" target="_blank" title="<% echo(oya/sub) %>" rel="noopener"><img src="<% echo(oya/imgsrc) %>" alt="<% echo(oya/srcname) %>" width="<% echo (oya/w) %>" height="<% echo (oya/h) %>" loading="lazy"></a>
-							<% elsedef %>
-							<img src="<% echo(oya/imgsrc) %>" alt="<% echo(oya/srcname) %>" title="<% echo(oya/sub) %>" width="<% echo (oya/w) %>" height="<% echo (oya/h) %>" loading="lazy">
-							<% /def %>
+							<a href="<% echo(oya/src) %>" target="_blank" rel="noopener">
+							<% /def %>	
+								<img src="<% echo(oya/imgsrc) %>" alt="<% echo (oya/sub) %> by <% echo (oya/name) %>" title="<% echo (oya/sub) %> by <% echo (oya/name) %>" width="<% echo (oya/w) %>" height="<% echo (oya/h) %>" loading="lazy">
+								<% def(oya/thumb) %>
+								</a>
+								<% /def %>
 						</figure>
 						<% /def %>
 						<div class="res">
 							<div class="comment_wrap">
 								<p><% echo(oya/com) %></p>
 								<% def(oya/limit) %><p class="limit">このスレは古いので、もうすぐ消えます。</p><% /def %>
-								<% def(resform) %><% def(oya/skipres) %><p class="ryaku">レス<% echo(oya/skipres) %> 件省略。[<a href="<% echo(self) %>?res=<% echo(oya/no) %>">すべて見る</a>]</p><% /def %><% /def %>
+								<% def(oya/skipres) %>
 							</div>
+							<hr>
+							<div class="comment_wrap">
+								レス<% echo(oya/skipres) %>件省略中。
+								<% /def %>
+							</div>	
 							<% def(oya/res) %>
 							<% each(oya/res) %>
 							<hr>
-							<div>
+							<div class="res_wrap">
 								<h4>
 									<span class="oyaresno">[<% echo(oya/res/no) %>]</span>
 									<span class="rsub"><% echo(oya/res/sub) %></span> :
@@ -280,14 +293,18 @@
 										<% /def %>
 										<br>
 										<% def(oya/res/continue) %>
-										<a href="<% echo(self) %>?mode=continue&amp;no=<% echo(oya/res/continue) %>">●続きを描く</a><% /def %><% def(oya/res/pch) %> <a href="<% echo(self) %>?mode=openpch&amp;pch=<% echo(oya/res/pch) %>" target="_blank">●動画</a><% /def %>
+										<a href="<% echo(self) %>?mode=continue&amp;no=<% echo(oya/res/continue) %>">●続きを描く</a><% /def %><% def(oya/res/spch)%><span class="for_pc"><% /def %><% def(oya/res/pch) %> <a href="<% echo(self) %>?mode=openpch&amp;pch=<% echo(oya/res/pch) %>" target="_blank">●動画</a><% /def %>
+										<% def(oya/res/spch)%></span><% /def %>
 									</figcaption>
 									<% def(oya/res/thumb) %>
-									<a href="<% echo(oya/res/src) %>" title="<% echo(oya/res/sub) %>" target="_blank"><img src="<% echo(oya/res/imgsrc) %>" width="<% echo (oya/res/w) %>" height="<% echo (oya/res/h) %>" alt="<% echo(oya/res/srcname) %>" loading="lazy"></a>
-									<% elsedef %>
-									<img src="<% echo(oya/res/imgsrc) %>" alt="<% echo(oya/res/srcname) %>" title="<% echo(oya/res/sub) %>" width="<% echo (oya/res/w) %>" height="<% echo (oya/res/h) %>" loading="lazy">
+									<a href="<% echo(oya/res/src) %>"  target="_blank">
 									<% /def %>
-								</figure>
+									<img src="<% echo(oya/res/imgsrc) %>" alt="<% echo(oya/res/sub) %> by <% echo(oya/res/name) %>" title="<% echo(oya/res/sub) %> by <% echo(oya/res/name) %>" width="<% echo (oya/res/w) %>" height="<% echo (oya/res/h) %>" loading="lazy" <% if(oya/res/w,>=,748) %>style="float:none;margin-right:0"<% /if %>>
+									<% def(oya/res/thumb) %>
+										</a>
+										<% /def %>
+
+									</figure>
 								<% /def %>
 								<div class="comment_wrap">
 									<p><% echo(oya/res/com) %></p>
@@ -298,39 +315,14 @@
 						</div>
 						<div class="thfoot">
 							<hr>
-							<% if(resform,==,false) %>
-							<% def(oya/skipres) %>
-							レス<% echo(oya/skipres) %>件省略。すべて見るには返信ボタンをクリックしてください。
-							<% /def %>
 							<% def(sharebutton) %>
 							<span class="share_button">
 								<a target="_blank" href="https://twitter.com/intent/tweet?&text=%5B<% echo(oya/no|urlencode) %>%5D%20<% def(oya/share_sub)%><% echo(oya/share_sub) %><% else %><% echo(oya/sub|urlencode) %><% /def %>%20by%20<% def(oya/share_name)%><% echo(oya/share_name) %><% else %><% echo(oya/name|urlencode) %><% /def %>%20-%20<% echo(title|urlencode) %>&url=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-twitter button"><img src="<% echo(skindir) %>img/twitter.svg" alt=""> tweet</span></a>
 								<a target="_blank" class="fb btn" href="http://www.facebook.com/share.php?u=<% echo(rooturl|urlencode) %><% echo(self|urlencode) %>?res=<% echo(oya/no|urlencode) %>"><span class="icon-facebook2 button"><img src="<% echo(skindir) %>img/facebook.svg" alt=""> share</span></a>
 							</span>
-								<% /def %>
-							<% def(notres) %><span class="button"><a href="<% echo(self) %>?res=<% echo(oya/no) %>"><img src="<% echo(skindir) %>img/rep.svg" alt=""> 返信</a></span> <a href="#header" title="一番上へ">[↑]</a><% /def %>
-							<% /if %>
-							<% def(resform) %>
-							<% def(oya/disp_resform) %>
-							<form class="resform" action="<% echo(self) %>" method="post" enctype="multipart/form-data">
-								<input type="hidden" name="mode" value="regist">
-								<input type="hidden" name="resto" value="<% echo(oya/no) %>">
-								<input type="hidden" name="textonly" value="on">
-								<label>name<% def(usename) %><% echo(usename) %><% /def %> <input class="form" type="text" name="name" size="20" value="" autocomplete="username"></label>
-								<label>sub<% def(usesub) %><% echo(usesub) %><% /def %> <input class="form" type="text" name="sub" size="18" value="<% def(oya/resub) %><% echo(oya/resub) %><% /def %>" autocomplete="section-sub"></label><br>
-								<label>URL <input class="form" type="text" name="url" size="20" autocomplete="url"></label>
-								<label>mail <input class="form" type="text" name="email" size="8" autocomplete="email"></label><br>
-								<textarea class="form" name="com" cols="56" rows="3" wrap="soft"></textarea><br>
-								<label>Pass <input class="form" type="password" name="pwd" size="8" value="" autocomplete="current-password"></label>
-								<input class="button" type="submit" value="返信">
-								<a href="#header" title="一番上へ">[↑]</a>
-							</form>
-							<% elsedef %>
-							<p class="resform">
-								<a href="#header" title="一番上へ">[↑]</a>
-							</p>
 							<% /def %>
-							<% /def %>
+							<% def(notres) %><span class="button"><a href="<% echo(self) %>?res=<% echo(oya/no) %>"><img src="<% echo(skindir) %>img/rep.svg" alt=""><% def(oya/disp_resform)%>返信<% elsedef %>表示<% /def %></a></span><% /def %>
+							<a href="#header" title="上へ">[&uarr;]</a>
 						</div>
 				</div>
 				<% /each %>
@@ -338,14 +330,42 @@
 		</main>
 		<footer id="footer">
 			<div>
-				<% def(notres) %>
-				<p class="page">
-					<% def(prev) %><a href="<% echo(prev) %>">≪BACK</a> |<% /def %> <% def(next) %><a href="<% echo(next) %>">NEXT≫</a> <% /def %>
-					<% echo(paging) %>
-					
-				</p>
-				<% /def %>
+		
+				<nav>
+					<% def(resno) %>
+						<div class="pcdisp page">
+							<% def(res_prev) %><a href="<% echo (self) %>?res=<% echo (@res_prev/no) %>">≪<% echo (@res_prev/substr_sub) %></a><% /def %>
+							| <a href="<% echo(self2) %>">Top</a> | 
+							<% def(res_next) %><a href="<% echo (self) %>?res=<% echo (@res_next/no) %>"><% echo (@res_next/substr_sub) %>≫</a><% /def %>
+						</div>
+		
+						<div class="mobiledisp">
+							<% def(res_prev) %>Prev: <a href="<% echo (self) %>?res=<% echo (@res_prev/no) %>"><% echo (@res_prev/sub) %></a><br><% /def %> 
+							<% def(res_next) %>Next: <a href="<% echo (self) %>?res=<% echo (@res_next/no) %>"><% echo (@res_next/sub) %></a><br><% /def %>
+						</div>
+						<% def(view_other_works)%>
+						<div class="view_other_works">
+							<% each(view_other_works)%><div><a href="<% echo (self) %>?res=<%%(view_other_works/no)%%>"><img src="<%% (view_other_works/imgsrc)%%>" alt="<%% (view_other_works/sub)%%> by <%% (view_other_works/name)%%>" title="<%% (view_other_works/sub)%%> by <%% (view_other_works/name)%%>" width="<%% (view_other_works/w)%%>" height="<%% (view_other_works/h)%%>" loading="lazy"></a></div><% /each %>
+						</div>
+						<% /def %>	
+
+					<% /def %>
+		
+					<% def(notres) %>
+						<div class="page">
+							<% def(prev) %><a href="<% echo(prev) %>">≪Prev</a><% /def %> | <a href="<% echo(self2) %>">Top</a> |
+							<% def(next) %><a href="<% echo(next) %>">Next≫</a> <% /def %><br>
+							<% echo(paging) %>
+						</div>
+					<% /def %>
+				</nav>	
 				<form class="delf" action="<% echo(self) %>" method="post">
+					<% def(notres) %>
+					<input type="hidden" name="logfilename" value="<% def(logfilename)%><% echo(logfilename)%><% /def %>">
+					<% /def %>
+					<% def(resno) %>
+					<input type="hidden" name="thread_no" value="<% def(@oya/0/no) %><% echo(@oya/0/no) %><% /def %>">
+					<% /def %>
 					<p>
 						No <input class="form" type="number" min="1" name="del[]" value="" autocomplete="off">
 						<span class="input_disp_none"><input type="text" value="" autocomplete="username"></span>
@@ -358,7 +378,7 @@
 						</select>
 						<label>[<input type="checkbox" name="onlyimgdel" value="on">ImageOnly]</label>
 						<input class="button" type="submit" value=" OK ">
-						<span class="stylechanger">Color: 
+						<span class="stylechanger">Style: 
 							<select class="form" id="mystyle" onchange="SetCss(this);">
 								<option>MONO</option>
 								<option>Dark</option>

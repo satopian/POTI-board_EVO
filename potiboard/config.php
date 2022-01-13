@@ -1,6 +1,6 @@
 <?php
 /*
-  * POTI-board EVO v3.03.6 lot.210712
+  * POTI-board EVO v3.19.5 lot.211222
   * by POTI改 >> https://paintbbs.sakura.ne.jp/poti/
   *
   * POTI-board EVO の設定ファイルです。
@@ -22,7 +22,7 @@ define('LOG_MAX', '2000');
 
 define('SKIN_DIR', 'pink/');
 
-//define('SKIN_DIR', 'theme/');
+// define('SKIN_DIR', 'theme/');
 
 //メール通知のほか、シェアボタンなどで使用
 //設置場所のURL。phpのあるディレクトリの'/'まで
@@ -44,7 +44,7 @@ define('USE_IMG_UPLOAD','1');
 
 //画像のないコメントのみの新規投稿を拒否する する:1 しない:0
 define('DENY_COMMENTS_ONLY', '0');
-//する:1 でも管理画面からはコメントのみの投稿ができます。
+//する:1 でも管理者はコメントのみの投稿ができます。
 
 //しぃペインターを使う 使う:1 使わない:0 
 define('USE_SHI_PAINTER', '1');
@@ -213,6 +213,9 @@ define('DO_NOT_CHANGE_POSTS_TIME', '0');
 //する:1 にすると投稿を編集しても投稿日時は変更されず最初の投稿日時のままになります。
 //編集マークも付きません。
 
+//レス画面に前後のスレッドの画像を表示する する:1 しない:0
+define('VIEW_OTHER_WORKS', '1');
+
 /* ---------- お絵かき設定 ---------- */
 
 //お絵かき機能を使用する する:1 しない:0
@@ -262,6 +265,9 @@ define('USE_CONTINUE', '1');
 //新規投稿でコンティニューする時にも削除キーが必要 必要:1 不要:0
 //不要:0 で新規投稿なら誰でも続きを描く事ができるようになります。
 define('CONTINUE_PASS', '0');
+
+//レス画像から新規投稿で続きを描いた画像をレスとして投稿する する:1 しない:0
+define('RES_CONTINUE_IN_CURRENT_THREAD', '1');
 
 /* ---------- 詳細設定 ---------- */
 

@@ -22,20 +22,21 @@
 <meta property="og:site_name"  content="" />
 <meta property="og:description" content="<% echo (oya/descriptioncom) %>" />
 <% /def %>
-<!--/SNS-->
+<!--ENDSNS-->
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 <link rel="stylesheet" href="<% echo(skindir) %>pink.css">
 <link rel="stylesheet" href="<% echo(skindir) %>icomoon/style.css">
 <style>.input_disp_none{display: none;}span.canvas_size_wrap {display: inline-block;padding: 8px 0 0;}</style>
 <style id="for_mobile"></style>
-<title>[<% echo (oya/no) %>] <% echo (oya/sub) %> by <% echo (oya/name) %> - <% echo (title) %></title>
+
+<title>[<% echo(oya/no) %>] <% echo(oya/sub) %> by <% echo(oya/name) %> - <% echo(title) %></title>
 <% def(n) %>
 <!--
 // title…掲示板タイトル
 // charset…文字コード
 -->
 <% /def %>
-<% ========== クッキー読込み用JavaScript(必須) ========== %>
+<!--クッキー読込み用JavaScript(必須)-->
 <script src="loadcookie.js"></script>
 </head>
 <body>
@@ -61,26 +62,29 @@
 	-->
 <% /def %>
 	</header>
-<% ========== 親記事グループ ========== %>
+<!--親記事グループ-->
+
+
 <% each(oya) %>
 
 <article>
-<% ========== 親記事ヘッダここから ========== %>
-<h2 class="article_title">[<% echo (oya/no) %>] <% echo (oya/sub) %></h2>
-<div class="article_info">
-<span class="article_info_name"><a href="search.php?page=1&imgsearch=on&query=<% echo (oya/encoded_name) %>&radio=2" target="_blank" rel="noopener"><% echo (oya/name) %></a></span><% def(oya/url) %><span class="article_info_desc">[<a href="<% echo (oya/url) %>" target="_blank" rel="nofollow noopener noreferrer">URL</a>]</span> <% /def %>
-<% def(oya/id) %><span class="article_info_desc">ID:<% echo (oya/id) %></span> <% /def %>
-<span class="article_info_desc"><% echo (oya/now) %></span>
-<% def(oya/src) %><% def(oya/painttime) %><span class="article_info_painttime">描画時間:<% echo (oya/painttime) %></span><% /def %><% /def %>
-<% def(oya/updatemark) %><span class="article_info_desc"><% echo (oya/updatemark) %></span> <% /def %>
-</div>
-<% def(oya/src) %>
-<div class="article_img_info">
-<% def(oya/continue) %><span class="article_info_continue">☆<a href="<% echo (self) %>?mode=continue&no=<% echo (oya/continue) %>">続きを描く</a></span> <% /def %> <% def(oya/pch) %><% def(oya/continue) %>| <% /def %><span class="article_info_animation">☆<a href="<% echo (self) %>?mode=openpch&pch=<% echo (oya/pch) %>" target="_blank">動画</a></span><% /def %>
-</div>
-<% /def %>
-<% ========== 親記事ヘッダここまで ========== %>
-<% def(n) %>
+	<!--親記事ヘッダここから-->
+	<h2 class="article_title"><a href="<% echo (self) %>?res=<% echo (oya/no) %>">[<% echo (oya/no) %>] <% echo (oya/sub) %></a></h2>
+	<div class="article_info">
+	<span class="article_info_name"><a href="search.php?page=1&imgsearch=on&query=<% echo (oya/encoded_name) %>&radio=2" target="_blank" rel="noopener"><% echo (oya/name) %></a></span><% def(oya/url) %><span class="article_info_desc">[<a href="<% echo (oya/url) %>" target="_blank" rel="nofollow noopener noreferrer">URL</a>]</span> <% /def %>
+	<% def(oya/id) %><span class="article_info_desc">ID:<% echo (oya/id) %></span> <% /def %>
+	<span class="article_info_desc"><% echo (oya/now) %></span>
+	<% def(oya/src) %><% def(oya/painttime) %><span class="article_info_painttime">描画時間:<% echo (oya/painttime) %></span><% /def %><% /def %>
+	<% def(oya/updatemark) %><span class="article_info_desc"><% echo (oya/updatemark) %></span><% /def %>
+	<% def(oya/thumb) %><span class="article_info_desc">- サムネイル表示中 -</span><% /def %>
+	</div>
+	<% def(oya/src) %>
+	<div class="article_img_info">
+	<% def(oya/continue) %><span class="article_info_continue">☆<a href="<% echo (self) %>?mode=continue&no=<% echo (oya/continue) %>">続きを描く</a></span> <% /def %> <% def(oya/spch)%><span class="for_pc"><% /def %><% def(oya/pch) %><% def(oya/continue) %>| <% /def %><span class="article_info_animation">☆<a href="<% echo (self) %>?mode=openpch&pch=<% echo (oya/pch) %>" target="_blank">動画</a></span><% /def %><% def(oya/spch)%></span><% /def %>
+	</div>
+	<% /def %>
+	<!--親記事ヘッダここまで-->
+		<% def(n) %>
 <!--
 // oya…親記事配列
 // oya/no…No
@@ -122,28 +126,30 @@
 -->
 <% /def %>
 
-<% ========== レスがあれば・・・ ========== %>
+<!--レスがあれば・・・-->
 <% def(oya/res) %>
-<% ========== レス記事グループ ========== %>
+<!--レス記事グループ-->
+
 <% each(oya/res) %>
 <hr>
 <div class="res_article_wrap">
-<% レス記事ヘッダここから %>
-<div class="res_article_title">[<% echo (oya/res/no) %>] <% echo (oya/res/sub) %></div>
-<div class="article_info">
-<span class="article_info_name"><a href="search.php?page=1&imgsearch=on&query=<% echo (oya/res/encoded_name) %>&radio=2" target="_blank" rel="noopener"><% echo (oya/res/name) %></a></span><% def(oya/res/url) %><span class="article_info_desc">[<a href="<% echo (oya/res/url) %>" target="_blank" rel="nofollow noopener noreferrer">URL</a>]</span> <% /def %>
-<% def(oya/res/id) %><span class="article_info_desc">ID:<% echo (oya/res/id) %></span> <% /def %>
-<span class="article_info_desc"><% echo (oya/res/now) %></span>
-<% def(oya/res/src) %><% def(oya/res/painttime) %><span class="article_info_painttime">描画時間:<% echo (oya/res/painttime) %></span><% /def %><% /def %>
-<% def(oya/res/updatemark) %><span class="article_info_desc"><% echo (oya/res/updatemark) %></span> <% /def %>
-</div>
-<% def(oya/res/src) %>
-<div class="article_img_info">
-<% def(oya/res/continue) %><span class="article_info_continue">☆<a href="<% echo (self) %>?mode=continue&no=<% echo (oya/res/continue) %>">続きを描く</a></span><% /def %> <% def(oya/res/pch) %><% def(oya/res/continue) %>| <% /def %><span class="article_info_animation">☆<a href="<% echo (self) %>?mode=openpch&pch=<% echo (oya/res/pch) %>" target="_blank">動画</a></span><% /def %>
-</div>
-<% /def %>
-<% レス記事ヘッダここまで %>
-
+	<!-- レス記事ヘッダここから -->
+	<div class="res_article_title">[<% echo (oya/res/no) %>] <% echo (oya/res/sub) %></div>
+	<div class="article_info">
+	<span class="article_info_name"><a href="search.php?page=1&imgsearch=on&query=<% echo (oya/res/encoded_name) %>&radio=2" target="_blank" rel="noopener"><% echo (oya/res/name) %></a></span><% def(oya/res/url) %><span class="article_info_desc">[<a href="<% echo (oya/res/url) %>" target="_blank" rel="nofollow noopener noreferrer">URL</a>]</span> <% /def %>
+	<% def(oya/res/id) %><span class="article_info_desc">ID:<% echo (oya/res/id) %></span><% /def %>
+	<span class="article_info_desc"><% echo (oya/res/now) %></span>
+	<% def(oya/res/src) %><% def(oya/res/painttime) %><span class="article_info_painttime">描画時間:<% echo (oya/res/painttime) %></span><% /def %><% /def %>
+	<% def(oya/res/updatemark) %><span class="article_info_desc"><% echo (oya/res/updatemark) %></span><% /def %>
+	<% def(oya/res/thumb) %><span class="article_info_desc">- サムネイル表示中 -</span><% /def %>
+	</div>
+	<% def(oya/res/src) %>
+	<div class="article_img_info">
+	<% def(oya/res/continue) %><span class="article_info_continue">☆<a href="<% echo (self) %>?mode=continue&no=<% echo (oya/res/continue) %>">続きを描く</a></span><% /def %> <% def(oya/res/spch)%><span class="for_pc"><% /def %><% def(oya/res/pch) %><% def(oya/res/continue) %>| <% /def %><span class="article_info_animation">☆<a href="<% echo (self) %>?mode=openpch&pch=<% echo (oya/res/pch) %>" target="_blank">動画</a></span><% /def %><% def(oya/res/spch)%></span><% /def %>
+	</div>
+	<% /def %>
+	<!-- レス記事ヘッダここまで -->
+		
 <% def(n) %>
 <!--
 // oya/res…レス記事配列
@@ -180,9 +186,8 @@
 <% /def %>
 </div>
 <% /each %>
-<% ========== レス記事グループここまで ========== %>
+<!--レス記事グループここまで-->
 <% /def %>
-
 <div class="clear"></div>
 <div class="margin_resbutton_res">
 <div class="res_button_wrap">
@@ -192,7 +197,7 @@
 		document.getElementById("p_input_com").value += "<% echo(resname) %><% def(_san)%><% echo(_san) %><% elsedef %>さん<% /def %>";
 	}</script>
 	
-	<% コピーボタン %><button class="copy_button" onclick="add_to_com()">投稿者名をコピー</button>
+	<!--コピーボタン--><button class="copy_button" onclick="add_to_com()">投稿者名をコピー</button>
 	<% /def %>
 	<% /def %>
 	
@@ -208,18 +213,18 @@
 <!-- /thread -->
 </article>
 <% /each %>
-<% ========== 親記事グループここまで ========== %>
+<!--親記事グループここまで-->
 <div class="clear"></div>
-<% ========== お絵かきフォーム欄 ========== %>
+<!--お絵かきフォーム欄-->
 <% def(paintform) %>
-<% ========== 実際のお絵かきフォーム ========== %>
+<!--実際のお絵かきフォーム-->
 <% def(paint) %>
 <div id="res_paint_form">
 <form action="<% echo (self) %>" method="post">
-<% ========== お絵かきアプレット ========== %>
+<!--お絵かきアプレット-->
 <script>
 function is_mobile() {
-if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 769px)').matches))  return true;
+if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 768px)').matches))  return true;
 return false;
 }
 if(is_mobile()){
@@ -246,9 +251,7 @@ if(is_mobile()){
 <!-- 選択メニューを出さない時に起動するアプリ -->
 <input type="hidden" name="shi" value="neo">
 <% /def %>
-
-<!-- <input type="hidden" name="shi" value="1"> -->
-<% ===キャンバスサイズ 設定はconfig.phpで === %>
+<!-- キャンバスサイズ 設定はconfig.phpで-->
 <% def(n) %>
 <!--
 config.phpで設定した
@@ -289,13 +292,12 @@ PMAX_H //高さ
 		}
 	?>
 	</select>
-	<% ===キャンバスサイズ ここまで === %>
+	<!-- キャンバスサイズ ここまで-->
 	<% def(use_select_palettes) %>
 	<span class="palette_type bold_gray">PALETTE</span> <select name="selected_palette_no" title="パレット" class="canvas_select palette_type"><% echo(palette_select_tags) %></select>
 	<% /def %>
 </span>
 	<!-- NEOを使う -->
-	</span>
 	<% def(anime) %><label class="checkbox use_animation"><input type="checkbox" value="true" name="anime"<% echo (animechk) %>>動画記録</label><% /def %>
 	<% def(n) %>
 <!--
@@ -309,7 +311,7 @@ PMAX_H //高さ
 </div>
 
 <% /def %>
-<% ========== お絵かきフォーム欄のみ時に表示 ========== %>
+<!--お絵かきフォーム欄のみ時に表示-->
 <% def(n) %>
 <!--
 // pmaxw…お絵かき最大サイズ(横)
@@ -322,7 +324,7 @@ PMAX_H //高さ
 
 <% /def %>
 
-<% ========== 投稿フォーム欄 ========== %>
+<!--投稿フォーム欄-->
 <% def(form) %>
 <form action="<% echo (self) %>" method="POST" enctype="multipart/form-data" id="post_form">
 <input type="hidden" name="token" value="<% def(token) %><% echo(token) %><% /def %>">
@@ -363,7 +365,7 @@ PMAX_H //高さ
 // resub…レス時の返信用題名(Re: ～)
 -->
 <% /def %>
-<% ========== ファイルアップロード欄 ========== %>
+<!--ファイルアップロード欄-->
 <% def(upfile) %>
 
 	 <tr>
@@ -385,7 +387,7 @@ PMAX_H //高さ
  <tr><td colspan="2" style="text-align: center;" class="post_table_submit td_noborder"><input type="submit" value="送信する" class="post_submit"></td></tr>
  <tr>
   <td colspan="2" class="td_noborder">
-<% ========== ファイルアップロード時の説明 ========== %>
+<!--ファイルアップロード時の説明-->
 <% def(upfile) %>
 	<ul class="howtowrite">
 		<% def(hide_the_checkbox_for_nofile) %>
@@ -400,39 +402,60 @@ PMAX_H //高さ
 </table>
 </form>
 <% /def %>
-<% def(form) %>
-<% elsedef %>
-	<hr>
-<% /def %>
+<hr>
 
-<footer>
-<% ========== メンテナンスフォーム欄 ========== %>
-<form action="<% echo (self) %>" method="post">
-<div class="mente_wrap">
-<span class="nk">記事No.<input type="number" min="1" name="del[]" autocomplete="off" class="edit_number"></span>
-<span class="input_disp_none"><input type="text" value="" autocomplete="username"></span>
-<span class="nk">削除キー<input type="password" name="pwd" size="8" value="" autocomplete="current-password" class="edit_password"></span>
-<select name="mode">
-<option value="edit">編集</option>
-<% def(userdel) %>
-<option value="usrdel">削除</option>
-<% /def %>
-<% def(n) %>
-<!--
-// userdel…ユーザー削除権限(0は削除不可)
--->
-<% /def %>
-</select>
-<span class="nk"><label class="checkbox"><input type="checkbox" name="onlyimgdel" value="on">画像だけ消す</label></span>
-<input type="submit" value="OK">
-</div>
-</form>
+	<nav>
+		<div class="pagelink pcdisp">
+		<% def(res_prev) %><a href="<% echo (self) %>?res=<% echo (@res_prev/no) %>">≪<% echo (@res_prev/substr_sub) %></a><% /def %> 
+		<div class="pagelink_top"><a href="<% echo (self2) %>">掲示板トップ</a></div>
+		<% def(res_next) %><a href="<% echo (self) %>?res=<% echo (@res_next/no) %>"><% echo (@res_next/substr_sub) %>≫</a><% /def %>
+		</div>
+		<div class="mobiledisp">
+			<% def(res_prev) %>
+			前: <a href="<% echo (self) %>?res=<% echo (@res_prev/no) %>"><% echo (@res_prev/sub) %></a>
+			<br>
+			<% /def %>
+			<% def(res_next) %>
+			次: <a href="<% echo (self) %>?res=<% echo (@res_next/no) %>"><% echo (@res_next/sub) %></a>
+			<br>
+			<% /def %>
+		</div>
+		<% def(view_other_works)%>
+		<div class="view_other_works">
+			<% each(view_other_works)%><div><a href="<% echo (self) %>?res=<%%(view_other_works/no)%%>"><img src="<%% (view_other_works/imgsrc)%%>" alt="<%% (view_other_works/sub)%%> by <%% (view_other_works/name)%%>" title="<%% (view_other_works/sub)%%> by <%% (view_other_works/name)%%>" width="<%% (view_other_works/w)%%>" height="<%% (view_other_works/h)%%>" loading="lazy"></a></div><% /each %>
+		</div>
+		<% /def %>	
 
-<% ========== JavaScriptの実行(クッキーを読込み、フォームに値をセット) ========== %>
-<script>
-l(); //LoadCookie
-</script>
-
+	</nav>
+	<footer>
+	<!--メンテナンスフォーム欄-->
+	<form action="<% echo (self) %>" method="post">
+	<input type="hidden" name="thread_no" value="<% def(@oya/0/no) %><% echo(@oya/0/no) %><% /def %>">
+	<div class="mente_wrap">
+	<span class="nk">記事No.<input type="number" min="1" name="del[]" autocomplete="off" class="edit_number"></span>
+	<span class="input_disp_none"><input type="text" value="" autocomplete="username"></span>
+	<span class="nk">削除キー<input type="password" name="pwd" value="" autocomplete="current-password" class="edit_password"></span>
+	<select name="mode">
+	<option value="edit">編集</option>
+	<% def(userdel) %>
+	<option value="usrdel">削除</option>
+	<% /def %>
+	<% def(n) %>
+	<!--
+	// userdel…ユーザー削除権限(0は削除不可)
+	-->
+	<% /def %>
+	</select>
+	<span class="nk"><label class="checkbox"><input type="checkbox" name="onlyimgdel" value="on">画像だけ消す</label></span>
+	<input type="submit" value="OK">
+	</div>
+	</form>
+	
+	<!--JavaScriptの実行(クッキーを読込み、フォームに値をセット)-->
+	<script>
+	l(); //LoadCookie
+	</script>
+	
 <!--著作権表示 削除しないでください-->
 
 <div class="copyright">

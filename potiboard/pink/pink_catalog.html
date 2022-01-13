@@ -18,7 +18,7 @@
 -->
 <% /def %>
 
-<% ========== クッキー読込み用JavaScript(必須) ========== %>
+<!--クッキー読込み用JavaScript(必須)-->
 <script src="loadcookie.js"></script>
 </head><body>
 <div id="body">
@@ -41,25 +41,23 @@
 -->
 <% /def %>
 <div class="catalog_desc_wrap">
-<% ========== カタログ縦(y)配列 ========== %>
+<!--カタログ縦(y)配列-->
 <% each(y) %>
-<% ========== カタログ1行に対する横(x)配列 ========== %>
+<!--カタログ1行に対する横(x)配列-->
 <% each(y/x) %>
-<% ========== 記事があれば表示 ========== %><% def(y/x/no) %><div class="catalog_wrap">
+<!--記事があれば表示--><% def(y/x/no) %><div class="catalog_wrap">
 <div class="catalog_info_wrap">
 <div class="catalog_title"><a href="<% echo (self) %>?res=<% echo (y/x/no) %>">[<% echo (y/x/no) %>]&nbsp;<% echo (y/x/sub) %></a></div>
 <div class="catalog_name"><% echo (y/x/name) %></div>
 <div class="catalog_time"><% echo (y/x/now) %></div>
 </div>
-<% ========== 画像があれば・・・ ========== %>
+<!--画像があれば・・・-->
 <% def(y/x/imgsrc) %>
 <div class="catalog_img"><a href="<% echo (self) %>?res=<% echo (y/x/no) %>"><img src="<% echo (y/x/imgsrc) %>" alt="<% echo (y/x/sub) %> by <% echo (y/x/name) %>" title="<% echo (y/x/sub) %> by <% echo (y/x/name) %>" width="<% echo (y/x/w) %>" <% def(y/x/h) %>height="<% echo (y/x/h) %>"<% /def %> loading="lazy"></a></div>
 <% /def %>
-<% ========== 文字のみならば・・・ ========== %><% def(y/x/txt) %>
+<!--文字のみならば・・・--><% def(y/x/txt) %>
 <div class="catalog_noimg"><a href="<% echo (self) %>?res=<% echo (y/x/no) %>">画像なし</a></div>
-<% /def %></div><% /def %>
-<% ========== 記事が無い場合 ========== %><% def(y/x/noimg) %><div class="catalog_wrap no_article"></div><% /def %>
-<% /each %>
+<% /def %></div><% /def %><% /each %>
 <% /each %>
 </div>
 <% def(n) %>
@@ -81,7 +79,7 @@
  -->
  <% /def %>
  <hr>
-<% ========== メイン時ページング表示 ========== %>
+<!--メイン時ページング表示-->
 <nav>
 <div id="paging_wrap"><% echo (paging) %></div>
 <div class="pagelink">
@@ -98,12 +96,14 @@
  -->
  <% /def %>
 
-<% ========== メンテナンスフォーム欄 ========== %>
+<!--メンテナンスフォーム欄-->
 <form action="<% echo (self) %>" method="post">
+<input type="hidden" name="catalog_pageno" value="<% def(catalog_pageno)%><%% (catalog_pageno)%%><% /def %>">	
+<input type="hidden" name="mode_catalog" value="on">	
 <div class="mente_wrap">
 <span class="nk">記事No.<input type="number" min="1" name="del[]" autocomplete="off" class="edit_number"></span>
 <span class="input_disp_none"><input type="text" value="" autocomplete="username"></span>
-<span class="nk">削除キー<input type="password" name="pwd" size="8" value="" autocomplete="current-password" class="edit_password"></span>
+<span class="nk">削除キー<input type="password" name="pwd" value="" autocomplete="current-password" class="edit_password"></span>
 <select name="mode">
 <option value="edit">編集</option>
 <% def(userdel) %>
@@ -120,11 +120,11 @@
 </div>
 </form>
 
-<% ========== JavaScriptの実行(クッキーを読込み、フォームに値をセット) ========== %>
+<!--JavaScriptの実行(クッキーを読込み、フォームに値をセット)-->
 <script>
 l(); //LoadCookie
 </script>
-	
+<footer>
 <!--著作権表示 削除しないでください-->
 <div class="copyright">
 	<!-- GazouBBS v3.0 --><!-- ふたば改0.8 --><!-- POTI-board -->
@@ -140,7 +140,7 @@ l(); //LoadCookie
 	<!--http://wondercatstudio.com/-->
 	，<a href="http://skinny.sx68.net/" target="_blank" rel="noopener noreferrer" title="Skinny">Skinny</a>
 	</div>
-	
+</footer>	
 
 </div>
 <div id="bottom"></div>

@@ -54,10 +54,25 @@
 		<% def(useneo) %>
 		<link rel="stylesheet" href="neo.css<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>" type="text/css">
 		<script src="neo.js<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>" charset="UTF-8"></script>
+		<script>
+			function fixneo() {
+		
+				if(screen.width>767){//iPad以上の横幅の時は、NEOの網目のところでtouchmoveしない。
+					console.log(screen.width);
+					document.querySelector('#NEO').addEventListener('touchmove', function (e){
+						e.preventDefault();
+						e.stopPropagation();
+					}, { passive: false });
+				}
+			}
+			window.addEventListener('DOMContentLoaded',fixneo,false);
+		</script>
 		<% /def %>
 		<% def(pch_mode) %>
+		<% def(type_neo) %>
 		<link rel="stylesheet" href="neo.css<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>" type="text/css">
 		<script src="neo.js<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>" charset="UTF-8"></script>
+		<% /def %>
 		<% /def %>
 		<% def(chickenpaint)%>
 		<style>
@@ -68,13 +83,22 @@
 			user-select: none;
 		}
 		</style>
+		
 		<script>
-			function load() {
-			document.addEventListener("dblclick", function(e){ e.preventDefault();}, { passive: false });
-			}
-			window.onload = load;
+		function fixchicken() {
+			document.addEventListener('dblclick', function(e){ e.preventDefault()}, { passive: false });
+			const chicken=document.querySelector('#chickenpaint-parent');
+			chicken.addEventListener('contextmenu', function (e){
+				e.preventDefault();
+				e.stopPropagation();
+			}, { passive: false });
+			chicken.addEventListener('touchmove', function (e){
+				e.preventDefault();
+				e.stopPropagation();
+			}, { passive: false });
+		}
+		window.addEventListener('DOMContentLoaded',fixchicken,false);
 		</script>
-
 		
 
 <script src="chickenpaint/js/chickenpaint.min.js<% def(parameter_day) %>?<% echo(parameter_day)%><% /def %>"></script>
@@ -99,8 +123,8 @@
 		window.addEventListener("load", function() { cheerpJLoad(); }, false);
 
 		</script>
-		<% /def %>
 
+	<% /def %>
 		
 		<title><% echo(title) %></title>
 		<style id="for_mobile"></style>
@@ -122,7 +146,7 @@
 			<hr>
 			<div>
 				<p class="menu">
-					<a href="./">[もどる]</a>
+					<a href="<% echo(self2) %>">[もどる]</a>
 				</p>
 			</div>
 			<hr>
@@ -270,8 +294,8 @@
 						<% /def %>
 						<fieldset>
 							<legend>PALETTE</legend>
-							<select class="form" name="select" size="13" onchange="setPalette()">
-								<option>一時パレット</option>
+							<select class="form palette_select" name="select" size="13" onchange="setPalette()">
+								<option>一時保存パレット</option>
 								<% def(dynp) %><?php echo "\n"; ?>
 								<% echo(dynp) %>
 								<% /def %><?php echo "\n"; ?>
@@ -335,7 +359,8 @@
 								<option>13</option>
 								<option>14</option>
 							</select>
-							<input class="form" type="text" name="ped" size="8" onkeypress="Chenge_()" onchange="Chenge_()"><div id="psft" style="position:absolute;width:100px;height:30px;z-index:1;left:5px;top:10px;"></div>
+							<input class="form" type="text" name="ped" size="8" onkeypress="Chenge_()" onchange="Chenge_()">
+							<div id="psft"></div>
 							<script>
 								if(DynamicColor) PaletteListSetColor();
 							</script>
@@ -354,7 +379,7 @@
 								PaintTime :
 								<input type="text" size="24" name="count">
 							</p>
-							<script type="text/javascript">
+							<script>
 								timerID = 10;
 								stime = new Date();
 								function SetTimeCount() {
@@ -402,7 +427,7 @@
 						<h3>ツールバー</h3>
 							<p>
 								ツールバーの殆どのボタンは複数回クリックして機能を切り替える事が出来ます。<br>
-								右クリックで逆周り。その他パレットの色、マスクの色、一時保存ツールに現在の状態を登録、レイヤ表示非表示切り替え等全て右クリックです。<br>
+								右クリックで逆周り。その他パレットの色、マスクの色、一時保存ツールに現在の状態を登録、レイヤー表示非表示切り替え等全て右クリックです。<br>
 								逆にクリックでパレットの色と一時保存ツールに保存しておいた状態を取り出せます。
 							</p>
 						<h3>キャンバス部分</h3>
@@ -425,7 +450,7 @@
 							</ul>
 						<h3>コピーツールの特殊な利用方法</h3>
 							<p>
-								レイヤー間の移動は現時点ではコピーとレイヤー結合のみです。コピーでの移動方法は、まず移動したいレイヤ上の長方形を選択後、移動させたいレイヤを選択後に通常のコピーの作業を続けます。そうする事によりレイヤ間の移動が可能になります。
+								レイヤー間の移動は現時点ではコピーとレイヤー結合のみです。コピーでの移動方法は、まず移動したいレイヤー上の長方形を選択後、移動させたいレイヤーを選択後に通常のコピーの作業を続けます。そうする事によりレイヤー間の移動が可能になります。
 							</p>
 						<h2>ツールバーのボタンと特殊な機能の簡単な説明</h2>
 							<dl>
@@ -454,7 +479,7 @@
 								<dd>
 									透過レイヤー上を白で塗り潰した場合、下のレイヤーが見えなくなりますので上位レイヤーの線を消す時にはこのツールで消す様にして下さい。<br>
 									全消しはすべてを透過ピクセル化させるツールです。<br>
-									全けしを利用する場合はこのツールを選択後キャンバスをクリックでOK。
+									全消しを利用する場合はこのツールを選択後キャンバスをクリックでOK。
 								</dd>
 								<dt>描写方法の指定。(手書き,直線,ベジエ曲線)</dt>
 								<dd>
@@ -483,7 +508,7 @@
 									PaintBBSは透明なキャンバスを二枚重ねたような構造になっています。<br>
 									つまり主線を上に書き、色を下に描くと言う事も可能になるツールです。<br>
 									通常レイヤーと言う種類の物ですので鉛筆で描いたような線もキッチリ透過します。<br>
-									クリックでレイヤー入れ替え。右クリックで選択されているレイヤの表示、非表示切り替え。
+									クリックでレイヤー入れ替え。右クリックで選択されているレイヤーの表示、非表示切り替え。
 								</dd>
 							</dl>
 						<h2>投稿に関して</h2>
@@ -542,7 +567,7 @@
 			<section>
 				<script>
 				function is_mobile() {
-				if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 769px)').matches))  return true;
+				if (navigator.maxTouchPoints && ( window.matchMedia && window.matchMedia('(max-width: 768px)').matches))  return true;
 				return false;
 				}
 				if(is_mobile()){
@@ -553,7 +578,8 @@
 			<script type="text/javascript" src="loadcookie.js"></script>
 				<div class="thread">
 					<figure>
-						<img src="<% echo(picfile) %>">
+						<img src="<% echo(picfile) %>" width="<% echo(picw) %>" height="<% echo(pich) %>" alt="<% def(sub)%><% echo(sub)%> <% /def %><% def(name)%>by <% echo(name)%> <% /def %><% echo(picw) %>x<% echo(pich) %>" title="<% def(sub)%><% echo(sub)%> <% /def %><% def(name)%>by <% echo(name)%> <% /def %><% echo(picw) %>x<% echo(pich) %>">
+						
 						<figcaption><% echo(picfile) %><% def(painttime) %> PaintTime : <% echo(painttime) %><% /def %></figcaption>
 					</figure>
 					<hr class="hr">
@@ -590,7 +616,7 @@
 							<% /def %>
 
 						<span class="input_disp_none"><input type="text" value="" autocomplete="username"></span>
-						<% def(passflag) %>Pass <input class="form" type="password" name="pwd" size="8" value=""> <% /def %>
+						Pass <input class="form" type="password" name="pwd" value="">
 						<input class="button" type="submit" value="続きを描く">
 
 					</form>

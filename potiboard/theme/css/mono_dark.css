@@ -199,8 +199,7 @@ h1 + div {
 
 figure {
   float: left;
-  margin-right: 8px;
-  margin-bottom: 1ex;
+  margin: 0 8px 1em 0;
 }
 
 figure img {
@@ -237,13 +236,22 @@ ul.menu {
   margin-bottom: 1ex;
 }
 
-.res figure {
-  float: none;
+.res .comment_wrap {
+  min-width: 500px;
+  display: table;
 }
 
-.res .comment_wrap {
-  min-width: 300px;
-  display: table;
+.res figure {
+  float: none;
+  margin: 0;
+}
+
+.res figure img {
+  margin: 0 0 1em 0;
+}
+
+.res_wrap {
+  display: flow-root;
 }
 
 .resma {
@@ -387,6 +395,11 @@ form.adminin {
   height: 1.2em;
 }
 
+.palette_select {
+  max-width: 100%;
+  min-width: 78%;
+}
+
 .c {
   text-align: center;
 }
@@ -423,7 +436,7 @@ form.adminin {
 
 #catalog > div img {
   max-width: 100%;
-  max-height: 100%;
+  height: auto;
   vertical-align: middle;
 }
 
@@ -439,19 +452,64 @@ form.adminin {
   background-color: #3b4856;
 }
 
-p.page {
-  margin: 8px 0;
+.page {
+  margin: 15px 0;
+  text-align: center;
+  line-height: 2.2;
 }
 
-@media screen and (max-width: 1024px) {
+.view_other_works {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.view_other_works div {
+  width: 16.1%;
+  height: auto;
+  margin-right: 0.6%;
+  display: inline-block;
+  max-height: 200px;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.view_other_works img {
+  width: 100%;
+  height: auto;
+}
+
+.view_other_works div:nth-of-type(6n) {
+  margin-right: 0;
+}
+
+.pcdisp {
+  display: block;
+}
+
+.mobiledisp {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
   .res {
     clear: left;
   }
-}
-
-@media screen and (max-width: 768px) {
+  .res .comment_wrap {
+    min-width: initial;
+  }
   body {
     margin: 6px;
+  }
+  .pcdisp {
+    display: none;
+  }
+  .mobiledisp {
+    display: block;
+    margin: 15px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.8;
   }
 }
 
